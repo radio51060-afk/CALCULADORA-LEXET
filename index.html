@@ -27,7 +27,7 @@
   }
   *{box-sizing:border-box}
   html{background:#eef1f5}
-  body{margin:0;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#f5f7fa 0,#eef1f5 100%);min-height:100vh}
+  body{margin:0;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#f5f7fa 0,#eef1f5 100%);min-height:100vh;overflow-x:hidden;-webkit-text-size-adjust:100%;touch-action:manipulation}
   button,input,select{font:inherit}
   .topbar{background:var(--navy);color:#fff;padding:16px max(18px,env(safe-area-inset-left));border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:30}
   .topbar-inner{max-width:1480px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px}
@@ -110,8 +110,9 @@
   .result-toolbar h2{margin:0;font-size:16px;color:var(--navy)}
   .toolbar-actions{display:flex;gap:8px;flex-wrap:wrap}
   .toolbar-actions .btn{min-height:40px;padding:8px 12px;font-size:12px}
-  .preview-wrap{overflow:auto;border-radius:12px;background:#e8ebf0;border:1px solid #d7dde5;padding:12px}
-  .result-card{min-width:690px;background:#fff;color:#111;border:1px solid #333;font-family:Arial,Helvetica,sans-serif;box-shadow:0 4px 15px rgba(0,0,0,.08)}
+  .preview-wrap{overflow:hidden;border-radius:12px;background:#e8ebf0;border:1px solid #d7dde5;padding:12px;width:100%}
+  .preview-stage{position:relative;margin:0 auto;transition:height .15s ease,width .15s ease}
+  .result-card{width:690px;min-width:690px;background:#fff;color:#111;border:1px solid #333;font-family:Arial,Helvetica,sans-serif;box-shadow:0 4px 15px rgba(0,0,0,.08);transform-origin:top left}
   .result-card.placeholder{min-height:440px;display:flex;align-items:center;justify-content:center;color:#667085;border:1px dashed #98a2b3;background:#f8fafc;font-family:inherit;text-align:center;padding:30px}
   .card-brand{height:105px;display:flex;align-items:center;justify-content:space-between;padding:8px 50px 8px 48px}
   .card-brand .logo{width:110px;height:80px;object-fit:contain}
@@ -145,27 +146,76 @@
   .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,18px);background:#101828;color:#fff;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.2s ease;z-index:99;box-shadow:0 10px 30px rgba(0,0,0,.22)}
   .toast.show{opacity:1;transform:translate(-50%,0)}
   @media(max-width:980px){
-    .grid{grid-template-columns:1fr}
+    .grid{grid-template-columns:1fr;gap:16px}
     .result-panel{position:static}
     .topbar{position:static}
-    .actions{position:static;background:none;padding-top:16px}
+    .page{max-width:760px}
   }
   @media(max-width:620px){
-    .page{padding:14px 10px 30px}
-    .form-panel,.result-panel{padding:14px;border-radius:14px}
-    .field-grid,.advanced-grid{grid-template-columns:1fr}
-    .field.full{grid-column:auto}
-    .salary-summary{grid-template-columns:1fr 1fr 1fr;gap:5px}
-    .metric{padding:8px 6px}
-    .metric strong{font-size:11px}
-    .segmented span{font-size:11px;padding:6px 4px}
-    .vac-head{display:block}
-    .mini-actions{justify-content:flex-start;margin-top:8px}
-    .result-toolbar{align-items:flex-start}
-    .toolbar-actions{width:100%}
-    .toolbar-actions .btn{flex:1}
-    .preview-wrap{padding:7px;margin:0 -4px}
+    :root{--radius:14px;--shadow:0 5px 18px rgba(24,33,48,.08)}
+    body{background:#f3f5f8}
+    .topbar{padding:10px max(12px,env(safe-area-inset-left));border-bottom-width:2px}
+    .topbar-inner{gap:8px}
+    .brand{gap:9px}
+    .brand img{width:40px}
+    .brand-title{font-size:15px;line-height:1.15}
     .brand-sub,.offline-pill{display:none}
+    .page{padding:10px 8px calc(22px + env(safe-area-inset-bottom));max-width:none}
+    .grid{gap:12px}
+    .panel{border-radius:13px;box-shadow:0 3px 12px rgba(24,33,48,.07)}
+    .form-panel,.result-panel{padding:12px}
+    .panel-title{font-size:18px}
+    .panel-desc{font-size:12px;margin-bottom:14px}
+    .section{padding:14px 0}
+    .section-title{font-size:12px;margin-bottom:10px}
+    .field-grid,.advanced-grid{grid-template-columns:1fr;gap:10px}
+    .field.full{grid-column:auto}
+    label{font-size:12px}
+    input[type="text"],input[type="date"],input[type="number"],select{font-size:16px;min-height:48px;padding:11px 12px;border-radius:10px}
+    .salary-summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+    .metric{padding:8px 5px;text-align:center;min-width:0}
+    .metric small{font-size:8px;letter-spacing:.02em}
+    .metric strong{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .segmented{gap:5px;padding:4px}
+    .segmented span{font-size:10.5px;min-height:44px;padding:6px 3px;line-height:1.15}
+    .vac-head{display:block}
+    .vac-note{max-width:none;font-size:11px}
+    .mini-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;justify-content:stretch;margin-top:9px}
+    .mini-btn{min-height:38px;padding:6px 4px;font-size:10px}
+    .period{grid-template-columns:22px minmax(0,1fr) auto;gap:8px;padding:10px 9px}
+    .period-title{font-size:11.5px}
+    .period-sub{font-size:10px}
+    .period-days{font-size:12px}
+    .badge{display:block;width:max-content;margin:4px 0 0 0}
+    .manual-box,.optional-block{padding:10px}
+    details{padding:0 10px}
+    summary{min-height:44px;display:flex;align-items:center;justify-content:space-between}
+    summary::after{float:none;margin-left:auto}
+    .checkline{min-height:40px}
+    .hint{font-size:10px}
+    .actions{position:sticky;bottom:0;margin:2px -12px -12px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid #e5e7eb;z-index:20;box-shadow:0 -8px 18px rgba(24,33,48,.07)}
+    .actions .btn{min-height:48px}
+    .actions .btn-primary{flex:1.4}
+    .actions .btn-secondary{flex:.8}
+    .result-panel{padding:10px}
+    .result-toolbar{display:block;margin-bottom:9px}
+    .result-toolbar h2{font-size:15px;margin-bottom:8px}
+    .toolbar-actions{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:6px}
+    .toolbar-actions .btn{width:100%;min-height:44px;padding:8px 6px;font-size:11px}
+    .preview-wrap{padding:6px;margin:0;width:100%;overflow:hidden;border-radius:10px}
+    .preview-stage{margin:0 auto}
+    .result-card{width:690px;min-width:690px}
+    .result-card.placeholder{min-height:360px;padding:22px;font-size:14px}
+    .disclaimer{font-size:9.5px;line-height:1.4;margin-top:9px}
+    .toast{bottom:calc(14px + env(safe-area-inset-bottom));max-width:calc(100vw - 24px);text-align:center}
+  }
+  @media(max-width:390px){
+    .page{padding-left:6px;padding-right:6px}
+    .form-panel,.result-panel{padding:10px}
+    .segmented span{font-size:10px}
+    .metric strong{font-size:10px}
+    .toolbar-actions .btn{font-size:10px}
+    .actions{margin-left:-10px;margin-right:-10px;margin-bottom:-10px;padding-left:10px;padding-right:10px}
   }
   @media print{
     .topbar,.form-panel,.result-toolbar,.disclaimer{display:none!important}
@@ -173,7 +223,8 @@
     .grid{display:block}
     .result-panel{box-shadow:none;border:0;padding:0}
     .preview-wrap{border:0;background:#fff;padding:0;overflow:visible}
-    .result-card{min-width:0;box-shadow:none}
+    .preview-stage{width:auto!important;height:auto!important}
+    .result-card{min-width:0;box-shadow:none;transform:none!important}
   }
 </style>
 </head>
@@ -349,8 +400,10 @@
           <button id="downloadBtn" class="btn btn-primary" type="button" disabled>Descargar PNG</button>
         </div>
       </div>
-      <div class="preview-wrap">
-        <div id="resultCard" class="result-card placeholder">Completa los datos y pulsa <strong>&nbsp;Calcular&nbsp;</strong> para generar el resultado.</div>
+      <div id="previewWrap" class="preview-wrap">
+        <div id="previewStage" class="preview-stage">
+          <div id="resultCard" class="result-card placeholder">Completa los datos y pulsa <strong>&nbsp;Calcular&nbsp;</strong> para generar el resultado.</div>
+        </div>
       </div>
       <div class="disclaimer">Herramienta de apoyo interno. Los importes se generan con los parámetros visibles en “Ajustes avanzados”. Los periodos de vacaciones seleccionados se consideran pendientes de pago. La prima de antigüedad es opcional y, cuando se incluye, se calcula sobre el salario diario capturado/derivado, sin aplicar automáticamente topes, salario integrado u otros ajustes jurídicos.</div>
     </section>
@@ -577,6 +630,7 @@
         <tfoot><tr><td class="total-label" colspan="2">TOTAL</td>${cols.map(c=>`<td class="${c.key}">${mxn.format(totalFor(r,c.key))}</td>`).join('')}</tr></tfoot>
       </table>
       <div class="card-footer"><span>FECHA DE ELABORACIÓN</span><span>${fmtDate(new Date(Date.UTC(r.elaboration.getFullYear(),r.elaboration.getMonth(),r.elaboration.getDate())))}</span></div>`;
+    requestAnimationFrame(updatePreviewScale);
   }
   function canvasRoundedRect(ctx,x,y,w,h,r,fill,stroke){
     ctx.beginPath(); ctx.roundRect(x,y,w,h,r); if(fill){ctx.fillStyle=fill;ctx.fill();} if(stroke){ctx.strokeStyle=stroke;ctx.stroke();}
@@ -642,6 +696,22 @@
     drawText(ctx,fmtDate(elaborationUTC),W-margin-40,y+footH/2,520,'right','800',20,'#111');
     return canvas;
   }
+  function updatePreviewScale(){
+    const wrap=$('previewWrap'), stage=$('previewStage'), card=$('resultCard');
+    if(!wrap || !stage || !card) return;
+    // La tarjeta mantiene su ancho de diseño para conservar el formato de la imagen,
+    // pero se reduce visualmente en pantallas pequeñas para evitar desplazamiento horizontal.
+    card.style.transform='none';
+    stage.style.width='auto';
+    stage.style.height='auto';
+    const naturalWidth=690;
+    const available=Math.max(1,wrap.clientWidth-2);
+    const scale=Math.min(1,available/naturalWidth);
+    card.style.transform=`scale(${scale})`;
+    stage.style.width=`${naturalWidth*scale}px`;
+    // offsetHeight no cambia con transform; multiplicamos por la escala.
+    stage.style.height=`${card.offsetHeight*scale}px`;
+  }
   function safeFileName(name){ return String(name||'trabajador').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,60)||'trabajador'; }
   async function downloadImage(){
     if(!latestResult && !calculate()) return;
@@ -669,7 +739,7 @@
     $('includeAguinaldo').checked=true;$('includeSeniorityPremium').checked=true;$('aguinaldoAnnualDays').value=15;$('vacationPremiumPct').value=25;$('indemnityDays').value=90;$('seniorityDaysPerYear').value=12;$('conciliationPct').value=50;
     $('includeExtraBenefit').checked=false;$('extraBenefitName').value='';$('extraBenefitAmount').value='';$('extraBenefitBlock').classList.remove('active');
     latestResult=null;$('resultCard').className='result-card placeholder';$('resultCard').innerHTML='Completa los datos y pulsa <strong>&nbsp;Calcular&nbsp;</strong> para generar el resultado.';$('downloadBtn').disabled=true;$('copyBtn').disabled=true;$('errorBox').classList.remove('show');
-    updateSalarySummary();buildVacationPeriods(false);
+    updateSalarySummary();buildVacationPeriods(false);requestAnimationFrame(updatePreviewScale);
   }
   $('salaryType').addEventListener('change',updateSalarySummary);$('salaryAmount').addEventListener('input',updateSalarySummary);
   $('entryDate').addEventListener('change',()=>buildVacationPeriods(false));$('exitDate').addEventListener('change',()=>buildVacationPeriods(false));
@@ -680,6 +750,9 @@
   // Fecha de salida/cálculo inicial: hoy del dispositivo.
   $('exitDate').value=todayInput();
   updateSalarySummary(); buildVacationPeriods(false);
+  requestAnimationFrame(updatePreviewScale);
+  window.addEventListener('resize',()=>requestAnimationFrame(updatePreviewScale),{passive:true});
+  window.addEventListener('orientationchange',()=>setTimeout(updatePreviewScale,120),{passive:true});
 })();
 </script>
 </body>
