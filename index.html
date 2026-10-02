@@ -333,7 +333,7 @@
           <div class="advanced">
             <div class="checkline">
               <input id="includeAguinaldo" type="checkbox" checked />
-              <label for="includeAguinaldo">Incluir aguinaldo proporcional</label>
+              <label for="includeAguinaldo">Incluir aguinaldo proporcional <span style="font-weight:500;color:#667085">(desmárcalo para mostrar sólo vacaciones + prima vacacional)</span></label>
             </div>
             <div class="checkline">
               <input id="includeSeniorityPremium" type="checkbox" checked />
@@ -567,6 +567,7 @@
       vacationDays,vacationAmount,vacPremPct,vacationPremium,aguinaldoDays,aguinaldo,
       aguWorked,antiquityYears,indemnityDays,indemnity,seniorityDays,seniorityPremium,
       concPct,finiquito,liquidation,conciliation,modes:selectedCalcModes(),
+      includeAguinaldo:$('includeAguinaldo').checked,
       includeSeniorityPremium,includeExtraBenefit,extraBenefitName,extraBenefitAmount,
       elaboration:new Date(),
       salaryLabel:salary.type==='daily'?'SALARIO DIARIO':salary.type==='weekly'?'SALARIO SEMANAL':'SALARIO MENSUAL'
@@ -589,9 +590,9 @@
   function rowsFor(r){
     const rows=[
       {name:'VACACIONES',days:fmtDays(r.vacationDays),fin:r.vacationAmount,liq:r.vacationAmount,con:r.vacationAmount},
-      {name:'PRIMA VACACIONAL',days:`${num2.format(r.vacPremPct*100)}%`,fin:r.vacationPremium,liq:r.vacationPremium,con:r.vacationPremium},
-      {name:'AGUINALDO',days:fmtDays(r.aguinaldoDays),fin:r.aguinaldo,liq:r.aguinaldo,con:r.aguinaldo}
+      {name:'PRIMA VACACIONAL',days:`${num2.format(r.vacPremPct*100)}%`,fin:r.vacationPremium,liq:r.vacationPremium,con:r.vacationPremium}
     ];
+    if(r.includeAguinaldo) rows.push({name:'AGUINALDO',days:fmtDays(r.aguinaldoDays),fin:r.aguinaldo,liq:r.aguinaldo,con:r.aguinaldo});
     if(r.includeExtraBenefit) rows.push({name:r.extraBenefitName.toUpperCase(),days:'—',fin:r.extraBenefitAmount,liq:r.extraBenefitAmount,con:r.extraBenefitAmount});
     rows.push({name:'INDEMNIZACIÓN',days:fmtDays(r.indemnityDays),fin:null,liq:r.indemnity,con:r.indemnity*r.concPct});
     if(r.includeSeniorityPremium) rows.push({name:'PRIMA DE ANTIGÜEDAD',days:fmtDays(r.seniorityDays),fin:null,liq:r.seniorityPremium,con:r.seniorityPremium*r.concPct});
@@ -602,7 +603,8 @@
     const onlyFin = cols.length===1 && cols[0].key==='fin';
     const rows=rowsFor(r);
     if(!onlyFin) return rows;
-    const finNames=new Set(['VACACIONES','PRIMA VACACIONAL','AGUINALDO']);
+    const finNames=new Set(['VACACIONES','PRIMA VACACIONAL']);
+    if(r.includeAguinaldo) finNames.add('AGUINALDO');
     if(r.includeExtraBenefit) finNames.add(r.extraBenefitName.toUpperCase());
     return rows.filter(row=>finNames.has(row.name));
   }
