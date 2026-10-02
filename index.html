@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#182130" />
+<title>Calculadora Laboral LEXET</title>
+<style>
+  :root{
+    --navy:#182130;
+    --navy-2:#222c3b;
+    --gold:#c9aa72;
+    --ink:#1f2937;
+    --muted:#667085;
+    --line:#d9dee7;
+    --soft:#f5f7fa;
+    --green:#c6e0b4;
+    --green-strong:#739e54;
+    --red:#e90000;
+    --red-soft:#ffd8d8;
+    --purple:#d9b3e6;
+    --purple-strong:#8a4fa2;
+    --white:#ffffff;
+    --danger:#b42318;
+    --shadow:0 12px 30px rgba(24,33,48,.10);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html{background:#eef1f5}
+  body{margin:0;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#f5f7fa 0,#eef1f5 100%);min-height:100vh}
+  button,input,select{font:inherit}
+  .topbar{background:var(--navy);color:#fff;padding:16px max(18px,env(safe-area-inset-left));border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:30}
+  .topbar-inner{max-width:1480px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}
+  .brand img{width:52px;height:auto;display:block;border-radius:0}
+  .brand-copy{min-width:0}
+  .brand-title{font-weight:800;letter-spacing:.02em;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand-sub{font-size:12px;color:#d0d5dd;margin-top:2px}
+  .offline-pill{font-size:12px;border:1px solid rgba(255,255,255,.18);padding:7px 10px;border-radius:999px;color:#e9edf3;white-space:nowrap}
+  .page{max-width:1480px;margin:0 auto;padding:22px 18px 40px}
+  .grid{display:grid;grid-template-columns:minmax(390px,520px) minmax(0,1fr);gap:22px;align-items:start}
+  .panel{background:#fff;border:1px solid #e4e7ec;border-radius:var(--radius);box-shadow:var(--shadow)}
+  .form-panel{padding:20px}
+  .panel-title{margin:0 0 5px;font-size:20px;color:var(--navy)}
+  .panel-desc{margin:0 0 18px;font-size:13px;color:var(--muted);line-height:1.45}
+  .section{padding:16px 0;border-top:1px solid #edf0f4}
+  .section:first-of-type{border-top:0;padding-top:0}
+  .section-title{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#475467;margin:0 0 12px}
+  .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .field.full{grid-column:1/-1}
+  label{font-size:12px;font-weight:700;color:#344054}
+  input[type="text"],input[type="date"],input[type="number"],select{width:100%;border:1px solid #cfd6e1;border-radius:10px;padding:11px 12px;background:#fff;color:#101828;outline:none;min-height:44px}
+  input:focus,select:focus{border-color:#7f8da3;box-shadow:0 0 0 3px rgba(24,33,48,.08)}
+  input::placeholder{color:#98a2b3}
+  .money-wrap{position:relative}
+  .money-wrap::before{content:"$";position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#667085;font-weight:800}
+  .money-wrap input{padding-left:28px}
+  .salary-summary{margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .metric{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:10px;padding:9px 10px}
+  .metric small{display:block;color:#667085;font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:.04em}
+  .metric strong{display:block;margin-top:3px;color:#101828;font-size:13px}
+  .segmented{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;background:#f2f4f7;border-radius:12px;padding:5px}
+  .segmented label{position:relative;cursor:pointer}
+  .segmented input{position:absolute;opacity:0;pointer-events:none}
+  .segmented span{display:flex;align-items:center;justify-content:center;text-align:center;min-height:42px;padding:7px 8px;border-radius:9px;font-size:12px;font-weight:800;color:#475467;border:1px solid transparent}
+  .segmented input:checked+span{background:#fff;color:var(--navy);border-color:#d8dde6;box-shadow:0 2px 7px rgba(16,24,40,.08)}
+  .vac-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}
+  .vac-note{font-size:12px;color:#667085;line-height:1.4;margin:0;max-width:330px}
+  .mini-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .mini-btn{border:1px solid #d0d5dd;background:#fff;color:#344054;border-radius:8px;padding:6px 8px;font-size:11px;font-weight:700;cursor:pointer}
+  .mini-btn:hover{background:#f9fafb}
+  .periods{display:grid;gap:8px}
+  .period{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;border:1px solid #e4e7ec;border-radius:11px;padding:10px 11px;background:#fff}
+  .period input{width:18px;height:18px;accent-color:var(--navy)}
+  .period-main{min-width:0}
+  .period-title{font-size:12px;font-weight:800;color:#1d2939}
+  .period-sub{font-size:11px;color:#667085;margin-top:3px;line-height:1.35}
+  .period-days{font-weight:900;color:var(--navy);font-size:13px;white-space:nowrap}
+  .badge{display:inline-flex;align-items:center;border-radius:999px;padding:2px 6px;font-size:9px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;margin-left:5px}
+  .badge.full{background:#e8f5e1;color:#3f6b2a}
+  .badge.partial{background:#fff1cc;color:#875b00}
+  .manual-box{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;margin-top:10px;padding:10px 11px;background:#fafafa;border:1px dashed #cfd6df;border-radius:11px}
+  .manual-box input[type="checkbox"]{width:18px;height:18px;accent-color:var(--navy)}
+  .manual-controls{display:none;margin-top:8px}
+  .manual-box.active .manual-controls{display:block}
+  .empty-state{font-size:12px;color:#667085;background:#f8fafc;border:1px dashed #cfd6df;border-radius:10px;padding:12px;line-height:1.45}
+  details{border:1px solid #e4e7ec;border-radius:12px;padding:0 12px;background:#fbfcfd}
+  summary{cursor:pointer;list-style:none;padding:12px 0;font-weight:800;font-size:12px;color:#344054}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"＋";float:right;color:#667085}
+  details[open] summary::after{content:"−"}
+  .advanced{padding:0 0 12px}
+  .checkline{display:flex;align-items:center;gap:9px;padding:5px 0}
+  .checkline input{width:18px;height:18px;accent-color:var(--navy)}
+  .checkline label{font-weight:700}
+  .optional-block{margin-top:10px;padding:11px;border:1px dashed #cfd6df;border-radius:11px;background:#fff}
+  .optional-fields{display:none;margin-top:10px}
+  .optional-block.active .optional-fields{display:block}
+  .advanced-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+  .hint{font-size:10px;color:#667085;line-height:1.35;margin-top:5px}
+  .actions{display:flex;gap:10px;position:sticky;bottom:8px;background:linear-gradient(180deg,rgba(255,255,255,0),#fff 24%);padding-top:22px;z-index:10}
+  .btn{border:0;border-radius:11px;min-height:46px;padding:10px 16px;font-weight:800;cursor:pointer;transition:.15s ease;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+  .btn-primary{background:var(--navy);color:#fff;flex:1}
+  .btn-primary:hover{background:#243047;transform:translateY(-1px)}
+  .btn-secondary{background:#fff;color:#344054;border:1px solid #d0d5dd}
+  .btn-secondary:hover{background:#f9fafb}
+  .result-panel{padding:16px;position:sticky;top:92px}
+  .result-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+  .result-toolbar h2{margin:0;font-size:16px;color:var(--navy)}
+  .toolbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+  .toolbar-actions .btn{min-height:40px;padding:8px 12px;font-size:12px}
+  .preview-wrap{overflow:auto;border-radius:12px;background:#e8ebf0;border:1px solid #d7dde5;padding:12px}
+  .result-card{min-width:690px;background:#fff;color:#111;border:1px solid #333;font-family:Arial,Helvetica,sans-serif;box-shadow:0 4px 15px rgba(0,0,0,.08)}
+  .result-card.placeholder{min-height:440px;display:flex;align-items:center;justify-content:center;color:#667085;border:1px dashed #98a2b3;background:#f8fafc;font-family:inherit;text-align:center;padding:30px}
+  .card-brand{height:105px;display:flex;align-items:center;justify-content:space-between;padding:8px 50px 8px 48px}
+  .card-brand .logo{width:110px;height:80px;object-fit:contain}
+  .card-brand .qr{width:78px;height:78px;object-fit:contain}
+  .info-table,.calc-table{border-collapse:collapse;width:100%;table-layout:fixed}
+  .info-table td{border-bottom:1px solid #2f3339;padding:5px 8px;font-size:11px;line-height:1.2}
+  .info-table .label{width:36%;font-weight:800;text-transform:uppercase}
+  .info-table .value{text-align:right;font-weight:700}
+  .info-table tr.dark td{background:#242d3b;color:#fff}
+  .info-table .salary-em{color:#e52424;font-weight:900}
+  .bar{background:#595959;color:#fff;text-align:center;font-weight:900;font-size:11px;padding:4px;text-transform:uppercase;border-top:1px solid #111;border-bottom:1px solid #111}
+  .calc-table th,.calc-table td{border:1px solid #c8c8c8;padding:5px 6px;font-size:11px;text-align:right}
+  .calc-table th{font-weight:900;text-align:center;background:#f3f3f3;color:#111}
+  .calc-table th:first-child,.calc-table td:first-child{text-align:left;width:34%;font-weight:800}
+  .calc-table th.days,.calc-table td.days{width:11%;text-align:center;color:#d71920;font-weight:900}
+  .calc-table th.fin{background:var(--green)}
+  .calc-table th.liq{background:var(--red);color:#fff}
+  .calc-table th.con{background:var(--purple)}
+  .calc-table td.fin{background:#e5f1dc}
+  .calc-table td.liq{background:#ffe1e1}
+  .calc-table td.con{background:#f0def6}
+  .calc-table tfoot td{font-size:12px;font-weight:900;border-top:2px solid #111}
+  .calc-table tfoot td.total-label{text-align:center;background:#fff;color:#111}
+  .calc-table tfoot td.fin{background:var(--green);color:#2f6b15}
+  .calc-table tfoot td.liq{background:var(--red);color:#fff}
+  .calc-table tfoot td.con{background:var(--purple);color:#6b2b82}
+  .card-footer{display:flex;justify-content:space-between;gap:15px;padding:5px 18px 7px;font-size:10px;font-weight:800;font-style:italic}
+  .disclaimer{margin-top:10px;color:#667085;font-size:10px;line-height:1.45}
+  .error-box{display:none;margin-bottom:12px;padding:10px 12px;border-radius:10px;background:#fef3f2;color:#912018;border:1px solid #fecdca;font-size:12px;font-weight:700}
+  .error-box.show{display:block}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,18px);background:#101828;color:#fff;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.2s ease;z-index:99;box-shadow:0 10px 30px rgba(0,0,0,.22)}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  @media(max-width:980px){
+    .grid{grid-template-columns:1fr}
+    .result-panel{position:static}
+    .topbar{position:static}
+    .actions{position:static;background:none;padding-top:16px}
+  }
+  @media(max-width:620px){
+    .page{padding:14px 10px 30px}
+    .form-panel,.result-panel{padding:14px;border-radius:14px}
+    .field-grid,.advanced-grid{grid-template-columns:1fr}
+    .field.full{grid-column:auto}
+    .salary-summary{grid-template-columns:1fr 1fr 1fr;gap:5px}
+    .metric{padding:8px 6px}
+    .metric strong{font-size:11px}
+    .segmented span{font-size:11px;padding:6px 4px}
+    .vac-head{display:block}
+    .mini-actions{justify-content:flex-start;margin-top:8px}
+    .result-toolbar{align-items:flex-start}
+    .toolbar-actions{width:100%}
+    .toolbar-actions .btn{flex:1}
+    .preview-wrap{padding:7px;margin:0 -4px}
+    .brand-sub,.offline-pill{display:none}
+  }
+  @media print{
+    .topbar,.form-panel,.result-toolbar,.disclaimer{display:none!important}
+    body,.page{background:#fff;padding:0;margin:0}
+    .grid{display:block}
+    .result-panel{box-shadow:none;border:0;padding:0}
+    .preview-wrap{border:0;background:#fff;padding:0;overflow:visible}
+    .result-card{min-width:0;box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <img alt="LEXET" src="data:image/png;base64,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" />
+      <div class="brand-copy">
+        <div class="brand-title">Calculadora Laboral LEXET</div>
+        <div class="brand-sub">Finiquito · Liquidación · Conciliación</div>
+      </div>
+    </div>
+    <div class="offline-pill">Funciona sin internet</div>
+  </div>
+</header>
+
+<main class="page">
+  <div class="grid">
+    <section class="panel form-panel">
+      <h1 class="panel-title">Datos del cálculo</h1>
+      <p class="panel-desc">Captura lo indispensable. La calculadora genera el desglose y una imagen lista para compartir.</p>
+      <div id="errorBox" class="error-box"></div>
+
+      <div class="section">
+        <div class="section-title">Trabajador y empresa</div>
+        <div class="field-grid">
+          <div class="field full">
+            <label for="worker">Nombre del trabajador</label>
+            <input id="worker" type="text" autocomplete="off" placeholder="Ej. Jacqueline Aline Ramírez Juárez" />
+          </div>
+          <div class="field full">
+            <label for="company">Empresa / patrón</label>
+            <input id="company" type="text" autocomplete="off" placeholder="Nombre de la empresa o patrón" />
+          </div>
+          <div class="field">
+            <label for="entryDate">Fecha de ingreso</label>
+            <input id="entryDate" type="date" />
+          </div>
+          <div class="field">
+            <label for="exitDate">Fecha de salida / cálculo</label>
+            <input id="exitDate" type="date" />
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Salario</div>
+        <div class="field-grid">
+          <div class="field">
+            <label for="salaryType">Capturar salario como</label>
+            <select id="salaryType">
+              <option value="daily">Diario</option>
+              <option value="weekly">Semanal</option>
+              <option value="monthly">Mensual</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="salaryAmount">Importe</label>
+            <div class="money-wrap"><input id="salaryAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" /></div>
+          </div>
+        </div>
+        <div class="salary-summary">
+          <div class="metric"><small>Diario</small><strong id="salaryDailyView">$0.00</strong></div>
+          <div class="metric"><small>Semanal</small><strong id="salaryWeeklyView">$0.00</strong></div>
+          <div class="metric"><small>Mensual</small><strong id="salaryMonthlyView">$0.00</strong></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Tipo de resultado</div>
+        <div class="segmented">
+          <label><input type="checkbox" class="calc-mode" value="finiquito" checked /><span>Finiquito</span></label>
+          <label><input type="checkbox" class="calc-mode" value="liquidacion" /><span>Liquidación</span></label>
+          <label><input type="checkbox" class="calc-mode" value="conciliacion" /><span>Conciliación</span></label>
+        </div>
+        <div class="hint">Puedes seleccionar libremente uno, dos o los tres resultados.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Vacaciones a pagar</div>
+        <div class="vac-head">
+          <p class="vac-note">Selecciona el año de servicio que deba pagarse. Por defecto se marca únicamente el último periodo. Puedes elegir 1.º, 2.º, 3.º, varios o todos.</p>
+          <div class="mini-actions">
+            <button class="mini-btn" type="button" id="lastVacBtn">Sólo último</button>
+            <button class="mini-btn" type="button" id="allVacBtn">Todos</button>
+            <button class="mini-btn" type="button" id="noneVacBtn">Ninguno</button>
+          </div>
+        </div>
+        <div id="vacationPeriods" class="periods"><div class="empty-state">Captura fecha de ingreso y salida para mostrar los periodos de vacaciones.</div></div>
+        <div id="manualVacationBox" class="manual-box">
+          <input id="manualVacationToggle" type="checkbox" />
+          <div>
+            <label for="manualVacationToggle">Capturar manualmente los días de vacaciones</label>
+            <div class="manual-controls">
+              <input id="manualVacationDays" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Días a pagar" />
+              <div class="hint">Al activarlo, se ignoran temporalmente los periodos seleccionados.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <details>
+          <summary>Ajustes avanzados</summary>
+          <div class="advanced">
+            <div class="checkline">
+              <input id="includeAguinaldo" type="checkbox" checked />
+              <label for="includeAguinaldo">Incluir aguinaldo proporcional</label>
+            </div>
+            <div class="checkline">
+              <input id="includeSeniorityPremium" type="checkbox" checked />
+              <label for="includeSeniorityPremium">Incluir prima de antigüedad en liquidación y conciliación</label>
+            </div>
+            <div class="advanced-grid">
+              <div class="field">
+                <label for="aguinaldoAnnualDays">Días anuales de aguinaldo</label>
+                <input id="aguinaldoAnnualDays" type="number" min="0" step="0.01" value="15" />
+              </div>
+              <div class="field">
+                <label for="vacationPremiumPct">Prima vacacional</label>
+                <input id="vacationPremiumPct" type="number" min="0" step="0.01" value="25" />
+              </div>
+              <div class="field">
+                <label for="indemnityDays">Días de indemnización</label>
+                <input id="indemnityDays" type="number" min="0" step="0.01" value="90" />
+              </div>
+              <div class="field">
+                <label for="seniorityDaysPerYear">Prima antigüedad: días/año</label>
+                <input id="seniorityDaysPerYear" type="number" min="0" step="0.01" value="12" />
+              </div>
+              <div class="field">
+                <label for="conciliationPct">Conciliación sobre indemnización</label>
+                <input id="conciliationPct" type="number" min="0" max="100" step="0.01" value="50" />
+              </div>
+            </div>
+
+            <div id="extraBenefitBlock" class="optional-block">
+              <div class="checkline">
+                <input id="includeExtraBenefit" type="checkbox" />
+                <label for="includeExtraBenefit">Incluir una prestación o concepto extra</label>
+              </div>
+              <div class="optional-fields">
+                <div class="advanced-grid">
+                  <div class="field">
+                    <label for="extraBenefitName">Nombre de la prestación</label>
+                    <input id="extraBenefitName" type="text" autocomplete="off" placeholder="Ej. Salarios devengados" />
+                  </div>
+                  <div class="field">
+                    <label for="extraBenefitAmount">Cantidad</label>
+                    <div class="money-wrap"><input id="extraBenefitAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" /></div>
+                  </div>
+                </div>
+                <div class="hint">El concepto extra se suma íntegramente al finiquito y, por consecuencia, también al total de liquidación y conciliación cuando esos resultados estén seleccionados.</div>
+              </div>
+            </div>
+            <div class="hint">La configuración inicial replica la lógica operativa de la CALCULADORA LEXET V2: aguinaldo 15 días, prima vacacional 25%, indemnización 90 días, prima de antigüedad 12 días por año y conciliación al 50% de los conceptos indemnizatorios.</div>
+          </div>
+        </details>
+      </div>
+
+      <div class="actions">
+        <button id="calculateBtn" class="btn btn-primary" type="button">Calcular</button>
+        <button id="resetBtn" class="btn btn-secondary" type="button">Limpiar</button>
+      </div>
+    </section>
+
+    <section class="panel result-panel">
+      <div class="result-toolbar">
+        <h2>Vista previa</h2>
+        <div class="toolbar-actions">
+          <button id="copyBtn" class="btn btn-secondary" type="button" disabled>Copiar imagen</button>
+          <button id="downloadBtn" class="btn btn-primary" type="button" disabled>Descargar PNG</button>
+        </div>
+      </div>
+      <div class="preview-wrap">
+        <div id="resultCard" class="result-card placeholder">Completa los datos y pulsa <strong>&nbsp;Calcular&nbsp;</strong> para generar el resultado.</div>
+      </div>
+      <div class="disclaimer">Herramienta de apoyo interno. Los importes se generan con los parámetros visibles en “Ajustes avanzados”. Los periodos de vacaciones seleccionados se consideran pendientes de pago. La prima de antigüedad es opcional y, cuando se incluye, se calcula sobre el salario diario capturado/derivado, sin aplicar automáticamente topes, salario integrado u otros ajustes jurídicos.</div>
+    </section>
+  </div>
+</main>
+<div id="toast" class="toast"></div>
+
+<script>
+(() => {
+  'use strict';
+  const LOGO = 'data:image/png;base64,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';
+  const QR = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUoAAAFKAQAAAABTUiuoAAACE0lEQVR4nO2bTWrkMBCFvxoZemlDDtBHsW825Ei5gX2UHCAgLQM2bxaW7E5mCO4JbnuYqoX7h2/xQFSpXkk2sTGGH1tJcNRRRx111NE9UctRYV0yg5S/zdHtLsDRe9BWkhRBz9cRhgbUEyRJ+ojuI8DRLVHlz9RA+wIGFxlMJgCDMO4qwNFvoOqZTD1B1h0iwNEvovr8Rxuf5mQS6RECHP2L1aoFJDDqEaOOWPsCt975cK2OZnQwM7MGaF+r/IBpbgkfIcDRLTHn1ppCgveyPPXHqdThWh3NfqtLFZByHqmv3w2YivPaXYCj20JLZNMlCerctquvx+zG+sO1Orrklpmel7lFG4E2BkG6uDs+DVr2rRRGqCM2NG8VpCcxNJioY9nVDtfqKLkIxiDaCFIMpSbGcFsivRIejy494YiGayl6c4KBCaZiyQ7X6mjet2ZbtfZ/lCwbzPet86ClJ4xh7gRzExhDWaO6NIpeCc+Cml1H1KeL7OfrRcxWC6CNk88yToPe+K1ylhWkvs69xfrw3DoNup4dA5PNfotU/QHdR4Cj96Dr2bE0Yh2TlYHGZOr3F+DoPWharl8sw4thHb8/QICjG+K300iYTEMT5yUzUrOvAEe/gZpdR6wDGJrJGJaf59P6/6Fl8rSMmuabTovfWuby3hOeAOX2Dhohd/D52EQ3vbyv1glQ87cWHHXUUUcd/YfQX1HDMlVkThLcAAAAAElFTkSuQmCC';
+  const $ = (id) => document.getElementById(id);
+  const MS_DAY = 86400000;
+  const mxn = new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:2,maximumFractionDigits:2});
+  const num2 = new Intl.NumberFormat('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const longDate = new Intl.DateTimeFormat('es-MX',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
+  let vacationPeriods = [];
+  let latestResult = null;
+
+  function parseDate(value){
+    if(!value) return null;
+    const [y,m,d] = value.split('-').map(Number);
+    return new Date(Date.UTC(y,m-1,d));
+  }
+  function toInputDate(date){
+    if(!date) return '';
+    return `${date.getUTCFullYear()}-${String(date.getUTCMonth()+1).padStart(2,'0')}-${String(date.getUTCDate()).padStart(2,'0')}`;
+  }
+  function todayInput(){
+    const d=new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+  function addYears(date, years){
+    const y = date.getUTCFullYear()+years, m=date.getUTCMonth(), d=date.getUTCDate();
+    const last = new Date(Date.UTC(y,m+1,0)).getUTCDate();
+    return new Date(Date.UTC(y,m,Math.min(d,last)));
+  }
+  function diffDays(a,b){ return Math.max(0, Math.round((b-a)/MS_DAY)); }
+  function trunc2(n){ return Math.trunc((Number(n)+Number.EPSILON)*100)/100; }
+  function fmtDate(d){ return d ? longDate.format(d) : ''; }
+  function esc(s){ return String(s??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch])); }
+  function fmtDays(n){ return Number.isFinite(n) ? num2.format(n) : '0.00'; }
+  function vacationDaysForYear(y){
+    if(y<=0) return 0;
+    if(y===1) return 12;
+    if(y===2) return 14;
+    if(y===3) return 16;
+    if(y===4) return 18;
+    if(y===5) return 20;
+    return 22 + 2*Math.floor((y-6)/5);
+  }
+  function salaryValues(){
+    const amount = Math.max(0, Number($('salaryAmount').value)||0);
+    const type = $('salaryType').value;
+    let daily = type==='daily' ? amount : type==='weekly' ? amount/7 : amount/30;
+    return {daily,weekly:daily*7,monthly:daily*30,type,amount};
+  }
+  function updateSalarySummary(){
+    const s=salaryValues();
+    $('salaryDailyView').textContent=mxn.format(s.daily);
+    $('salaryWeeklyView').textContent=mxn.format(s.weekly);
+    $('salaryMonthlyView').textContent=mxn.format(s.monthly);
+  }
+  function buildVacationPeriods(preserve=true){
+    const entry=parseDate($('entryDate').value), exit=parseDate($('exitDate').value);
+    const old = new Set(preserve ? [...document.querySelectorAll('.vac-period-check:checked')].map(x=>x.dataset.year) : []);
+    vacationPeriods=[];
+    const host=$('vacationPeriods');
+    if(!entry || !exit || exit<=entry){
+      host.innerHTML='<div class="empty-state">Captura una fecha de ingreso anterior a la fecha de salida para mostrar los periodos.</div>';
+      return;
+    }
+    for(let year=1;year<80;year++){
+      const start=addYears(entry,year-1);
+      if(start>=exit) break;
+      const anniversary=addYears(entry,year);
+      const legal=vacationDaysForYear(year);
+      const complete=anniversary<=exit;
+      const periodEnd=complete?anniversary:exit;
+      const elapsed=diffDays(start,periodEnd);
+      const payable=complete?legal:trunc2((elapsed*legal)/365);
+      vacationPeriods.push({year,start,end:periodEnd,anniversary,legal,complete,elapsed,payable});
+      if(!complete) break;
+    }
+    if(!vacationPeriods.length){
+      host.innerHTML='<div class="empty-state">No se generaron periodos con las fechas capturadas.</div>';
+      return;
+    }
+    host.innerHTML=vacationPeriods.map((p,i)=>{
+      const checked = preserve && old.size ? old.has(String(p.year)) : i===vacationPeriods.length-1;
+      return `<label class="period">
+        <input class="vac-period-check" data-year="${p.year}" type="checkbox" ${checked?'checked':''}>
+        <div class="period-main">
+          <div class="period-title">${ordinal(p.year)} año <span class="badge ${p.complete?'full':'partial'}">${p.complete?'Completo':'Proporcional'}</span></div>
+          <div class="period-sub">${fmtDate(p.start)} a ${fmtDate(p.end)} · base legal ${fmtDays(p.legal)} días${p.complete?'':` · ${p.elapsed} días transcurridos`}</div>
+        </div>
+        <div class="period-days">${fmtDays(p.payable)} días</div>
+      </label>`;
+    }).join('');
+  }
+  function ordinal(n){ return n===1?'1.er':n===3?'3.er':`${n}.º`; }
+  function setVacationSelection(mode){
+    const boxes=[...document.querySelectorAll('.vac-period-check')];
+    if(!boxes.length) return;
+    boxes.forEach((b,i)=>b.checked = mode==='all' ? true : mode==='none' ? false : i===boxes.length-1);
+  }
+  function selectedVacationDays(){
+    if($('manualVacationToggle').checked) return Math.max(0,Number($('manualVacationDays').value)||0);
+    const checked = new Set([...document.querySelectorAll('.vac-period-check:checked')].map(x=>Number(x.dataset.year)));
+    let sum=0;
+    for(const p of vacationPeriods) if(checked.has(p.year)) sum+=p.payable;
+    return trunc2(sum);
+  }
+  function selectedCalcModes(){ return [...document.querySelectorAll('.calc-mode:checked')].map(i=>i.value); }
+  function validate(){
+    const errors=[];
+    const entry=parseDate($('entryDate').value), exit=parseDate($('exitDate').value);
+    if(!$('worker').value.trim()) errors.push('Captura el nombre del trabajador.');
+    if(!entry) errors.push('Captura la fecha de ingreso.');
+    if(!exit) errors.push('Captura la fecha de salida o cálculo.');
+    if(entry && exit && exit<=entry) errors.push('La fecha de salida debe ser posterior a la fecha de ingreso.');
+    if(!(salaryValues().daily>0)) errors.push('Captura un salario mayor a cero.');
+    if(!selectedCalcModes().length) errors.push('Selecciona al menos un tipo de resultado.');
+    if($('includeExtraBenefit').checked && !$('extraBenefitName').value.trim()) errors.push('Captura el nombre de la prestación extra.');
+    if($('includeExtraBenefit').checked && !(Number($('extraBenefitAmount').value)>0)) errors.push('Captura una cantidad mayor a cero para la prestación extra.');
+    const box=$('errorBox');
+    if(errors.length){ box.innerHTML=errors.join('<br>'); box.classList.add('show'); box.scrollIntoView({behavior:'smooth',block:'center'}); return false; }
+    box.classList.remove('show'); box.innerHTML=''; return true;
+  }
+  function calculate(){
+    if(!validate()) return null;
+    const entry=parseDate($('entryDate').value), exit=parseDate($('exitDate').value);
+    const salary=salaryValues();
+    const vacationDays=selectedVacationDays();
+    const vacationAmount=vacationDays*salary.daily;
+    const vacPremPct=Math.max(0,Number($('vacationPremiumPct').value)||0)/100;
+    const vacationPremium=vacationAmount*vacPremPct;
+    const aguAnnual=Math.max(0,Number($('aguinaldoAnnualDays').value)||0);
+    const jan1=new Date(Date.UTC(exit.getUTCFullYear(),0,1));
+    const aguStart=entry>jan1?entry:jan1;
+    const aguWorked=diffDays(aguStart,exit);
+    const aguinaldoDays=$('includeAguinaldo').checked ? trunc2((aguWorked*aguAnnual)/365) : 0;
+    const aguinaldo=aguinaldoDays*salary.daily;
+    const includeExtraBenefit=$('includeExtraBenefit').checked;
+    const extraBenefitName=includeExtraBenefit ? $('extraBenefitName').value.trim() : '';
+    const extraBenefitAmount=includeExtraBenefit ? Math.max(0,Number($('extraBenefitAmount').value)||0) : 0;
+    const finiquito=vacationAmount+vacationPremium+aguinaldo+extraBenefitAmount;
+    const antiquityYears=diffDays(entry,exit)/365;
+    const indemnityDays=Math.max(0,Number($('indemnityDays').value)||0);
+    const indemnity=indemnityDays*salary.daily;
+    const includeSeniorityPremium=$('includeSeniorityPremium').checked;
+    const seniorityPerYear=Math.max(0,Number($('seniorityDaysPerYear').value)||0);
+    const seniorityDays=includeSeniorityPremium ? antiquityYears*seniorityPerYear : 0;
+    const seniorityPremium=seniorityDays*salary.daily;
+    const concPct=Math.min(100,Math.max(0,Number($('conciliationPct').value)||0))/100;
+    const liquidation=finiquito+indemnity+seniorityPremium;
+    const conciliation=finiquito+(indemnity*concPct)+(seniorityPremium*concPct);
+    const result={
+      worker:$('worker').value.trim(), company:$('company').value.trim(), entry, exit, salary,
+      vacationDays,vacationAmount,vacPremPct,vacationPremium,aguinaldoDays,aguinaldo,
+      aguWorked,antiquityYears,indemnityDays,indemnity,seniorityDays,seniorityPremium,
+      concPct,finiquito,liquidation,conciliation,modes:selectedCalcModes(),
+      includeSeniorityPremium,includeExtraBenefit,extraBenefitName,extraBenefitAmount,
+      elaboration:new Date(),
+      salaryLabel:salary.type==='daily'?'SALARIO DIARIO':salary.type==='weekly'?'SALARIO SEMANAL':'SALARIO MENSUAL'
+    };
+    latestResult=result;
+    renderResult(result);
+    $('downloadBtn').disabled=false;
+    $('copyBtn').disabled=false;
+    return result;
+  }
+  function colsFor(modes){
+    const selected = new Set(Array.isArray(modes) ? modes : [modes]);
+    const single = selected.size===1;
+    const cols=[];
+    if(selected.has('finiquito')) cols.push({key:'fin',title:single?'SUBTOTAL':'FINIQUITO'});
+    if(selected.has('liquidacion')) cols.push({key:'liq',title:'LIQUIDACIÓN'});
+    if(selected.has('conciliacion')) cols.push({key:'con',title:'CONCILIACIÓN'});
+    return cols;
+  }
+  function rowsFor(r){
+    const rows=[
+      {name:'VACACIONES',days:fmtDays(r.vacationDays),fin:r.vacationAmount,liq:r.vacationAmount,con:r.vacationAmount},
+      {name:'PRIMA VACACIONAL',days:`${num2.format(r.vacPremPct*100)}%`,fin:r.vacationPremium,liq:r.vacationPremium,con:r.vacationPremium},
+      {name:'AGUINALDO',days:fmtDays(r.aguinaldoDays),fin:r.aguinaldo,liq:r.aguinaldo,con:r.aguinaldo}
+    ];
+    if(r.includeExtraBenefit) rows.push({name:r.extraBenefitName.toUpperCase(),days:'—',fin:r.extraBenefitAmount,liq:r.extraBenefitAmount,con:r.extraBenefitAmount});
+    rows.push({name:'INDEMNIZACIÓN',days:fmtDays(r.indemnityDays),fin:null,liq:r.indemnity,con:r.indemnity*r.concPct});
+    if(r.includeSeniorityPremium) rows.push({name:'PRIMA DE ANTIGÜEDAD',days:fmtDays(r.seniorityDays),fin:null,liq:r.seniorityPremium,con:r.seniorityPremium*r.concPct});
+    return rows;
+  }
+  function visibleRows(r){
+    const cols=colsFor(r.modes);
+    const onlyFin = cols.length===1 && cols[0].key==='fin';
+    const rows=rowsFor(r);
+    if(!onlyFin) return rows;
+    const finNames=new Set(['VACACIONES','PRIMA VACACIONAL','AGUINALDO']);
+    if(r.includeExtraBenefit) finNames.add(r.extraBenefitName.toUpperCase());
+    return rows.filter(row=>finNames.has(row.name));
+  }
+  function totalFor(r,key){ return key==='fin'?r.finiquito:key==='liq'?r.liquidation:r.conciliation; }
+  function renderResult(r){
+    const cols=colsFor(r.modes);
+    const rows=visibleRows(r);
+    const salaryDisplay=r.salary.type==='daily'?r.salary.daily:r.salary.type==='weekly'?r.salary.weekly:r.salary.monthly;
+    $('resultCard').className='result-card';
+    $('resultCard').innerHTML=`
+      <div class="card-brand"><img class="logo" src="${LOGO}" alt="LEXET"><img class="qr" src="${QR}" alt="QR"></div>
+      <table class="info-table">
+        <tr class="dark"><td class="label">NOMBRE DEL TRABAJADOR</td><td class="value">${esc(r.worker)}</td></tr>
+        <tr><td class="label">NOMBRE DEL PATRÓN</td><td class="value">${esc(r.company)||'&nbsp;'}</td></tr>
+        <tr class="dark"><td class="label">FECHA DE INGRESO</td><td class="value">${fmtDate(r.entry)}</td></tr>
+        <tr><td class="label salary-em">${r.salaryLabel}</td><td class="value salary-em">${mxn.format(salaryDisplay)}</td></tr>
+        ${r.salary.type==='daily'?'':`<tr><td class="label">SALARIO DIARIO</td><td class="value">${mxn.format(r.salary.daily)}</td></tr>`}
+        <tr><td class="label">FECHA DE SALIDA</td><td class="value">${fmtDate(r.exit)}</td></tr>
+        <tr class="dark"><td class="label">ANTIGÜEDAD (AÑOS)</td><td class="value">${fmtDays(r.antiquityYears)}</td></tr>
+      </table>
+      <div class="bar">DESGLOSE</div>
+      <table class="calc-table">
+        <thead><tr><th>PRESTACIÓN</th><th class="days">DÍAS</th>${cols.map(c=>`<th class="${c.key}">${c.title}</th>`).join('')}</tr></thead>
+        <tbody>${rows.map(row=>`<tr><td>${esc(row.name)}</td><td class="days">${row.days}</td>${cols.map(c=>`<td class="${c.key}">${row[c.key]==null?'':mxn.format(row[c.key])}</td>`).join('')}</tr>`).join('')}</tbody>
+        <tfoot><tr><td class="total-label" colspan="2">TOTAL</td>${cols.map(c=>`<td class="${c.key}">${mxn.format(totalFor(r,c.key))}</td>`).join('')}</tr></tfoot>
+      </table>
+      <div class="card-footer"><span>FECHA DE ELABORACIÓN</span><span>${fmtDate(new Date(Date.UTC(r.elaboration.getFullYear(),r.elaboration.getMonth(),r.elaboration.getDate())))}</span></div>`;
+  }
+  function canvasRoundedRect(ctx,x,y,w,h,r,fill,stroke){
+    ctx.beginPath(); ctx.roundRect(x,y,w,h,r); if(fill){ctx.fillStyle=fill;ctx.fill();} if(stroke){ctx.strokeStyle=stroke;ctx.stroke();}
+  }
+  function loadImg(src){ return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;}); }
+  function drawFit(ctx,img,x,y,w,h){
+    const ratio=Math.min(w/img.width,h/img.height), dw=img.width*ratio, dh=img.height*ratio;
+    ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
+  }
+  function drawText(ctx,text,x,y,maxWidth,align='left',weight='700',size=24,color='#111'){
+    ctx.save();ctx.fillStyle=color;ctx.font=`${weight} ${size}px Arial, Helvetica, sans-serif`;ctx.textAlign=align;ctx.textBaseline='middle';
+    let t=String(text??'');
+    if(maxWidth && ctx.measureText(t).width>maxWidth){ while(t.length>2 && ctx.measureText(t+'…').width>maxWidth) t=t.slice(0,-1); t+='…'; }
+    ctx.fillText(t,x,y);ctx.restore();
+  }
+  async function buildCanvas(r){
+    const cols=colsFor(r.modes);
+    const rows=visibleRows(r);
+    const W=1500, margin=18, brandH=190, infoRowH=50, barH=42, headH=58, dataH=54, totalH=62, footH=50;
+    const infoRows= r.salary.type==='daily' ? 6 : 7;
+    const H=margin*2+brandH+(infoRows*infoRowH)+barH+headH+(rows.length*dataH)+totalH+footH;
+    const canvas=document.createElement('canvas'); canvas.width=W; canvas.height=H;
+    const ctx=canvas.getContext('2d');
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.strokeRect(1,1,W-2,H-2);
+    const [logo,qr]=await Promise.all([loadImg(LOGO),loadImg(QR)]);
+    drawFit(ctx,logo,70,24,220,140); drawFit(ctx,qr,W-250,32,145,145);
+    let y=margin+brandH;
+    const labelW=540, rowW=W-margin*2;
+    const salaryDisplay=r.salary.type==='daily'?r.salary.daily:r.salary.type==='weekly'?r.salary.weekly:r.salary.monthly;
+    const info=[
+      {l:'NOMBRE DEL TRABAJADOR',v:r.worker,dark:true},
+      {l:'NOMBRE DEL PATRÓN',v:r.company,dark:false},
+      {l:'FECHA DE INGRESO',v:fmtDate(r.entry),dark:true},
+      {l:r.salaryLabel,v:mxn.format(salaryDisplay),dark:false,salary:true},
+      ...(r.salary.type==='daily'?[]:[{l:'SALARIO DIARIO',v:mxn.format(r.salary.daily),dark:false}]),
+      {l:'FECHA DE SALIDA',v:fmtDate(r.exit),dark:false},
+      {l:'ANTIGÜEDAD (AÑOS)',v:fmtDays(r.antiquityYears),dark:true}
+    ];
+    for(const item of info){
+      ctx.fillStyle=item.dark?'#242d3b':'#fff';ctx.fillRect(margin,y,rowW,infoRowH);
+      ctx.strokeStyle='#252525';ctx.lineWidth=1;ctx.strokeRect(margin,y,rowW,infoRowH);
+      drawText(ctx,item.l,margin+10,y+infoRowH/2,labelW-20,'left','800',22,item.dark?'#fff':item.salary?'#e52424':'#111');
+      drawText(ctx,item.v||'',W-margin-14,y+infoRowH/2,rowW-labelW-20,'right','700',23,item.dark?'#fff':item.salary?'#e52424':'#111');
+      y+=infoRowH;
+    }
+    ctx.fillStyle='#595959';ctx.fillRect(margin,y,rowW,barH);drawText(ctx,'DESGLOSE',W/2,y+barH/2,rowW,'center','900',22,'#fff');y+=barH;
+    const nameW=500, daysW=165, remain=rowW-nameW-daysW, valueW=remain/cols.length;
+    const x0=margin;
+    const headerCells=[{x:x0,w:nameW,t:'PRESTACIÓN',bg:'#f3f3f3',fg:'#111'},{x:x0+nameW,w:daysW,t:'DÍAS',bg:'#f3f3f3',fg:'#111'}];
+    cols.forEach((c,i)=>headerCells.push({x:x0+nameW+daysW+i*valueW,w:valueW,t:c.title,bg:c.key==='fin'?'#c6e0b4':c.key==='liq'?'#e90000':'#d9b3e6',fg:c.key==='liq'?'#fff':'#111'}));
+    for(const c of headerCells){ctx.fillStyle=c.bg;ctx.fillRect(c.x,y,c.w,headH);ctx.strokeStyle='#444';ctx.strokeRect(c.x,y,c.w,headH);drawText(ctx,c.t,c.x+c.w/2,y+headH/2,c.w-12,'center','900',22,c.fg);} y+=headH;
+    for(const row of rows){
+      ctx.fillStyle='#fff';ctx.fillRect(x0,y,nameW,dataH);ctx.strokeStyle='#b7b7b7';ctx.strokeRect(x0,y,nameW,dataH);drawText(ctx,row.name,x0+10,y+dataH/2,nameW-20,'left','800',22,'#111');
+      ctx.fillStyle='#fff';ctx.fillRect(x0+nameW,y,daysW,dataH);ctx.strokeRect(x0+nameW,y,daysW,dataH);drawText(ctx,row.days,x0+nameW+daysW/2,y+dataH/2,daysW-10,'center','900',22,'#d71920');
+      cols.forEach((c,i)=>{const x=x0+nameW+daysW+i*valueW; const bg=c.key==='fin'?'#e5f1dc':c.key==='liq'?'#ffe1e1':'#f0def6';ctx.fillStyle=bg;ctx.fillRect(x,y,valueW,dataH);ctx.strokeRect(x,y,valueW,dataH);const val=row[c.key]==null?'':mxn.format(row[c.key]);drawText(ctx,val,x+valueW-12,y+dataH/2,valueW-18,'right','700',21,'#111');});
+      y+=dataH;
+    }
+    ctx.fillStyle='#fff';ctx.fillRect(x0,y,nameW+daysW,totalH);ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.strokeRect(x0,y,nameW+daysW,totalH);drawText(ctx,'TOTAL',x0+(nameW+daysW)/2,y+totalH/2,nameW+daysW-20,'center','900',24,'#111');
+    cols.forEach((c,i)=>{const x=x0+nameW+daysW+i*valueW; const bg=c.key==='fin'?'#c6e0b4':c.key==='liq'?'#e90000':'#d9b3e6'; const fg=c.key==='liq'?'#fff':c.key==='fin'?'#2f6b15':'#6b2b82';ctx.fillStyle=bg;ctx.fillRect(x,y,valueW,totalH);ctx.strokeStyle='#111';ctx.strokeRect(x,y,valueW,totalH);drawText(ctx,mxn.format(totalFor(r,c.key)),x+valueW-12,y+totalH/2,valueW-20,'right','900',23,fg);});
+    y+=totalH;
+    const elaborationUTC=new Date(Date.UTC(r.elaboration.getFullYear(),r.elaboration.getMonth(),r.elaboration.getDate()));
+    drawText(ctx,'FECHA DE ELABORACIÓN',margin+40,y+footH/2,500,'left','800',20,'#111');
+    drawText(ctx,fmtDate(elaborationUTC),W-margin-40,y+footH/2,520,'right','800',20,'#111');
+    return canvas;
+  }
+  function safeFileName(name){ return String(name||'trabajador').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,60)||'trabajador'; }
+  async function downloadImage(){
+    if(!latestResult && !calculate()) return;
+    const c=await buildCanvas(latestResult); const a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download=`LEXET_${safeFileName(latestResult.worker)}_${toInputDate(latestResult.exit)}.png`; document.body.appendChild(a); a.click(); a.remove();
+    toast('Imagen PNG generada.');
+  }
+  async function copyImage(){
+    if(!latestResult && !calculate()) return;
+    try{
+      const c=await buildCanvas(latestResult);
+      const blob=await new Promise(res=>c.toBlob(res,'image/png'));
+      if(!navigator.clipboard || !window.ClipboardItem) throw new Error('Clipboard API no disponible');
+      await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
+      toast('Imagen copiada. Ya puedes pegarla en WhatsApp.');
+    }catch(e){
+      toast('Tu navegador no permite copiar la imagen aquí. Usa “Descargar PNG”.');
+    }
+  }
+  function toast(msg){ const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2800); }
+  function reset(){
+    $('worker').value='';$('company').value='';$('entryDate').value='';$('salaryAmount').value='';$('salaryType').value='daily';
+    $('exitDate').value=todayInput();
+    document.querySelectorAll('.calc-mode').forEach(el=>el.checked = el.value==='finiquito');
+    $('manualVacationToggle').checked=false;$('manualVacationDays').value='';$('manualVacationBox').classList.remove('active');
+    $('includeAguinaldo').checked=true;$('includeSeniorityPremium').checked=true;$('aguinaldoAnnualDays').value=15;$('vacationPremiumPct').value=25;$('indemnityDays').value=90;$('seniorityDaysPerYear').value=12;$('conciliationPct').value=50;
+    $('includeExtraBenefit').checked=false;$('extraBenefitName').value='';$('extraBenefitAmount').value='';$('extraBenefitBlock').classList.remove('active');
+    latestResult=null;$('resultCard').className='result-card placeholder';$('resultCard').innerHTML='Completa los datos y pulsa <strong>&nbsp;Calcular&nbsp;</strong> para generar el resultado.';$('downloadBtn').disabled=true;$('copyBtn').disabled=true;$('errorBox').classList.remove('show');
+    updateSalarySummary();buildVacationPeriods(false);
+  }
+  $('salaryType').addEventListener('change',updateSalarySummary);$('salaryAmount').addEventListener('input',updateSalarySummary);
+  $('entryDate').addEventListener('change',()=>buildVacationPeriods(false));$('exitDate').addEventListener('change',()=>buildVacationPeriods(false));
+  $('lastVacBtn').addEventListener('click',()=>setVacationSelection('last'));$('allVacBtn').addEventListener('click',()=>setVacationSelection('all'));$('noneVacBtn').addEventListener('click',()=>setVacationSelection('none'));
+  $('manualVacationToggle').addEventListener('change',e=>$('manualVacationBox').classList.toggle('active',e.target.checked));
+  $('includeExtraBenefit').addEventListener('change',e=>$('extraBenefitBlock').classList.toggle('active',e.target.checked));
+  $('calculateBtn').addEventListener('click',calculate);$('resetBtn').addEventListener('click',reset);$('downloadBtn').addEventListener('click',downloadImage);$('copyBtn').addEventListener('click',copyImage);
+  // Fecha de salida/cálculo inicial: hoy del dispositivo.
+  $('exitDate').value=todayInput();
+  updateSalarySummary(); buildVacationPeriods(false);
+})();
+</script>
+</body>
+</html>
