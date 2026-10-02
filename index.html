@@ -60,7 +60,7 @@
   .metric{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:10px;padding:9px 10px}
   .metric small{display:block;color:#667085;font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:.04em}
   .metric strong{display:block;margin-top:3px;color:#101828;font-size:13px}
-  .segmented{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;background:#f2f4f7;border-radius:12px;padding:5px}
+  .segmented{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:7px;background:#f2f4f7;border-radius:12px;padding:5px}
   .segmented label{position:relative;cursor:pointer}
   .segmented input{position:absolute;opacity:0;pointer-events:none}
   .segmented span{display:flex;align-items:center;justify-content:center;text-align:center;min-height:42px;padding:7px 8px;border-radius:9px;font-size:12px;font-weight:800;color:#475467;border:1px solid transparent}
@@ -114,6 +114,9 @@
   .preview-stage{position:relative;margin:0 auto;transition:height .15s ease,width .15s ease}
   .result-card{width:690px;min-width:690px;background:#fff;color:#111;border:1px solid #333;font-family:Arial,Helvetica,sans-serif;box-shadow:0 4px 15px rgba(0,0,0,.08);transform-origin:top left}
   .result-card.placeholder{min-height:440px;display:flex;align-items:center;justify-content:center;color:#667085;border:1px dashed #98a2b3;background:#f8fafc;font-family:inherit;text-align:center;padding:30px}
+  .vacation-card .card-brand{height:170px;display:flex;align-items:center;justify-content:flex-start;padding:8px 36px 8px 48px}
+  .vacation-card .card-brand .logo{width:300px;height:150px;object-fit:contain}
+
   .card-brand{height:105px;display:flex;align-items:center;justify-content:space-between;padding:8px 50px 8px 48px}
   .card-brand .logo{width:110px;height:80px;object-fit:contain}
   .card-brand .qr{width:78px;height:78px;object-fit:contain}
@@ -265,7 +268,7 @@
             <input id="entryDate" type="date" />
           </div>
           <div class="field">
-            <label for="exitDate">Fecha de salida / cálculo</label>
+            <label for="exitDate" id="exitDateLabel">Fecha de salida / cálculo</label>
             <input id="exitDate" type="date" />
           </div>
         </div>
@@ -297,11 +300,12 @@
       <div class="section">
         <div class="section-title">Tipo de resultado</div>
         <div class="segmented">
+          <label><input type="checkbox" class="calc-mode" value="vacaciones" /><span>Vacaciones</span></label>
           <label><input type="checkbox" class="calc-mode" value="finiquito" checked /><span>Finiquito</span></label>
           <label><input type="checkbox" class="calc-mode" value="liquidacion" /><span>Liquidación</span></label>
           <label><input type="checkbox" class="calc-mode" value="conciliacion" /><span>Conciliación</span></label>
         </div>
-        <div class="hint">Puedes seleccionar libremente uno, dos o los tres resultados.</div>
+        <div class="hint">Puedes elegir vacaciones como cálculo simplificado, o combinar finiquito, liquidación y conciliación.</div>
       </div>
 
       <div class="section">
@@ -314,7 +318,7 @@
             <button class="mini-btn" type="button" id="noneVacBtn">Ninguno</button>
           </div>
         </div>
-        <div id="vacationPeriods" class="periods"><div class="empty-state">Captura fecha de ingreso y salida para mostrar los periodos de vacaciones.</div></div>
+        <div id="vacationPeriods" class="periods"><div class="empty-state">Captura fecha de ingreso y fecha de cálculo/salida para mostrar los periodos de vacaciones.</div></div>
         <div id="manualVacationBox" class="manual-box">
           <input id="manualVacationToggle" type="checkbox" />
           <div>
@@ -519,13 +523,30 @@
     return trunc2(sum);
   }
   function selectedCalcModes(){ return [...document.querySelectorAll('.calc-mode:checked')].map(i=>i.value); }
+  function isVacationMode(modes = selectedCalcModes()){ return Array.isArray(modes) ? modes.includes('vacaciones') : modes==='vacaciones'; }
+  function syncCalcModes(changed){
+    const boxes=[...document.querySelectorAll('.calc-mode')];
+    const vac=boxes.find(b=>b.value==='vacaciones');
+    const others=boxes.filter(b=>b.value!=='vacaciones');
+    if(changed==='vacaciones' && vac && vac.checked) others.forEach(b=>b.checked=false);
+    if(changed && changed!=='vacaciones'){
+      const anyOther=others.some(b=>b.checked);
+      if(anyOther && vac) vac.checked=false;
+    }
+    updateExitLabel();
+  }
+  function updateExitLabel(){
+    const label=$('exitDateLabel');
+    if(!label) return;
+    label.textContent=isVacationMode() ? 'Fecha de cálculo' : 'Fecha de salida / cálculo';
+  }
   function validate(){
     const errors=[];
     const entry=parseDate($('entryDate').value), exit=parseDate($('exitDate').value);
     if(!$('worker').value.trim()) errors.push('Captura el nombre del trabajador.');
     if(!entry) errors.push('Captura la fecha de ingreso.');
-    if(!exit) errors.push('Captura la fecha de salida o cálculo.');
-    if(entry && exit && exit<=entry) errors.push('La fecha de salida debe ser posterior a la fecha de ingreso.');
+    if(!exit) errors.push(isVacationMode() ? 'Captura la fecha de cálculo.' : 'Captura la fecha de salida o cálculo.');
+    if(entry && exit && exit<=entry) errors.push((isVacationMode() ? 'La fecha de cálculo' : 'La fecha de salida') + ' debe ser posterior a la fecha de ingreso.');
     if(!(salaryValues().daily>0)) errors.push('Captura un salario mayor a cero.');
     if(!selectedCalcModes().length) errors.push('Selecciona al menos un tipo de resultado.');
     if($('includeExtraBenefit').checked && !$('extraBenefitName').value.trim()) errors.push('Captura el nombre de la prestación extra.');
@@ -537,6 +558,8 @@
   function calculate(){
     if(!validate()) return null;
     const entry=parseDate($('entryDate').value), exit=parseDate($('exitDate').value);
+    const modes=selectedCalcModes();
+    const vacationOnly=isVacationMode(modes);
     const salary=salaryValues();
     const vacationDays=selectedVacationDays();
     const vacationAmount=vacationDays*salary.daily;
@@ -546,11 +569,13 @@
     const jan1=new Date(Date.UTC(exit.getUTCFullYear(),0,1));
     const aguStart=entry>jan1?entry:jan1;
     const aguWorked=diffDays(aguStart,exit);
-    const aguinaldoDays=$('includeAguinaldo').checked ? trunc2((aguWorked*aguAnnual)/365) : 0;
+    const includeAguinaldo = !vacationOnly && $('includeAguinaldo').checked;
+    const aguinaldoDays=includeAguinaldo ? trunc2((aguWorked*aguAnnual)/365) : 0;
     const aguinaldo=aguinaldoDays*salary.daily;
     const includeExtraBenefit=$('includeExtraBenefit').checked;
     const extraBenefitName=includeExtraBenefit ? $('extraBenefitName').value.trim() : '';
     const extraBenefitAmount=includeExtraBenefit ? Math.max(0,Number($('extraBenefitAmount').value)||0) : 0;
+    const vacationOnlyTotal=vacationAmount+vacationPremium+extraBenefitAmount;
     const finiquito=vacationAmount+vacationPremium+aguinaldo+extraBenefitAmount;
     const antiquityYears=diffDays(entry,exit)/365;
     const indemnityDays=Math.max(0,Number($('indemnityDays').value)||0);
@@ -566,8 +591,8 @@
       worker:$('worker').value.trim(), company:$('company').value.trim(), entry, exit, salary,
       vacationDays,vacationAmount,vacPremPct,vacationPremium,aguinaldoDays,aguinaldo,
       aguWorked,antiquityYears,indemnityDays,indemnity,seniorityDays,seniorityPremium,
-      concPct,finiquito,liquidation,conciliation,modes:selectedCalcModes(),
-      includeAguinaldo:$('includeAguinaldo').checked,
+      concPct,vacationOnly,vacationOnlyTotal,finiquito,liquidation,conciliation,modes,
+      includeAguinaldo,
       includeSeniorityPremium,includeExtraBenefit,extraBenefitName,extraBenefitAmount,
       elaboration:new Date(),
       salaryLabel:salary.type==='daily'?'SALARIO DIARIO':salary.type==='weekly'?'SALARIO SEMANAL':'SALARIO MENSUAL'
@@ -581,6 +606,7 @@
   function colsFor(modes){
     const selected = new Set(Array.isArray(modes) ? modes : [modes]);
     const single = selected.size===1;
+    if(selected.has('vacaciones')) return [{key:'fin',title:'SUBTOTAL'}];
     const cols=[];
     if(selected.has('finiquito')) cols.push({key:'fin',title:single?'SUBTOTAL':'FINIQUITO'});
     if(selected.has('liquidacion')) cols.push({key:'liq',title:'LIQUIDACIÓN'});
@@ -598,7 +624,16 @@
     if(r.includeSeniorityPremium) rows.push({name:'PRIMA DE ANTIGÜEDAD',days:fmtDays(r.seniorityDays),fin:null,liq:r.seniorityPremium,con:r.seniorityPremium*r.concPct});
     return rows;
   }
+  function vacationRows(r){
+    const rows=[
+      {name:'VACACIONES',days:fmtDays(r.vacationDays),fin:r.vacationAmount},
+      {name:'PRIMA VACACIONAL',days:`${num2.format(r.vacPremPct*100)}%`,fin:r.vacationPremium}
+    ];
+    if(r.includeExtraBenefit) rows.push({name:r.extraBenefitName.toUpperCase(),days:'—',fin:r.extraBenefitAmount});
+    return rows;
+  }
   function visibleRows(r){
+    if(r.vacationOnly) return vacationRows(r);
     const cols=colsFor(r.modes);
     const onlyFin = cols.length===1 && cols[0].key==='fin';
     const rows=rowsFor(r);
@@ -608,8 +643,12 @@
     if(r.includeExtraBenefit) finNames.add(r.extraBenefitName.toUpperCase());
     return rows.filter(row=>finNames.has(row.name));
   }
-  function totalFor(r,key){ return key==='fin'?r.finiquito:key==='liq'?r.liquidation:r.conciliation; }
+  function totalFor(r,key){
+    if(r.vacationOnly) return r.vacationOnlyTotal;
+    return key==='fin'?r.finiquito:key==='liq'?r.liquidation:r.conciliation;
+  }
   function renderResult(r){
+    if(r.vacationOnly) return renderVacationResult(r);
     const cols=colsFor(r.modes);
     const rows=visibleRows(r);
     const salaryDisplay=r.salary.type==='daily'?r.salary.daily:r.salary.type==='weekly'?r.salary.weekly:r.salary.monthly;
@@ -634,6 +673,29 @@
       <div class="card-footer"><span>FECHA DE ELABORACIÓN</span><span>${fmtDate(new Date(Date.UTC(r.elaboration.getFullYear(),r.elaboration.getMonth(),r.elaboration.getDate())))}</span></div>`;
     requestAnimationFrame(updatePreviewScale);
   }
+  function renderVacationResult(r){
+    const rows=visibleRows(r);
+    $('resultCard').className='result-card vacation-card';
+    $('resultCard').innerHTML=`
+      <div class="card-brand"><img class="logo" src="${LOGO}" alt="LEXET"></div>
+      <table class="info-table">
+        <tr class="dark"><td class="label">NOMBRE DEL TRABAJADOR</td><td class="value">${esc(r.worker)}</td></tr>
+        <tr><td class="label">NOMBRE DEL PATRÓN</td><td class="value">${esc(r.company)||'&nbsp;'}</td></tr>
+        <tr class="dark"><td class="label">FECHA DE INGRESO</td><td class="value">${fmtDate(r.entry)}</td></tr>
+        <tr><td class="label salary-em">SALARIO MENSUAL</td><td class="value salary-em">${mxn.format(r.salary.monthly)}</td></tr>
+        <tr class="dark"><td class="label">SALARIO DIARIO</td><td class="value">${mxn.format(r.salary.daily)}</td></tr>
+        <tr><td class="label">FECHA DE CALCULO</td><td class="value">${fmtDate(r.exit)}</td></tr>
+        <tr class="dark"><td class="label">ANTIGÜEDAD (AÑOS)</td><td class="value">${fmtDays(r.antiquityYears)}</td></tr>
+      </table>
+      <div class="bar">DESGLOSE</div>
+      <table class="calc-table">
+        <thead><tr><th>PRESTACION</th><th class="days">DÍAS</th><th class="fin">SUBTOTAL</th></tr></thead>
+        <tbody>${rows.map(row=>`<tr><td>${esc(row.name)}</td><td class="days">${row.days}</td><td class="fin">${mxn.format(row.fin)}</td></tr>`).join('')}</tbody>
+        <tfoot><tr><td class="total-label" colspan="2">TOTAL</td><td class="fin">${mxn.format(r.vacationOnlyTotal)}</td></tr></tfoot>
+      </table>
+      <div class="card-footer"><span>FECHA DE ELABORACIÓN</span><span>${fmtDate(new Date(Date.UTC(r.elaboration.getFullYear(),r.elaboration.getMonth(),r.elaboration.getDate())))}</span></div>`;
+    requestAnimationFrame(updatePreviewScale);
+  }
   function canvasRoundedRect(ctx,x,y,w,h,r,fill,stroke){
     ctx.beginPath(); ctx.roundRect(x,y,w,h,r); if(fill){ctx.fillStyle=fill;ctx.fill();} if(stroke){ctx.strokeStyle=stroke;ctx.stroke();}
   }
@@ -649,6 +711,7 @@
     ctx.fillText(t,x,y);ctx.restore();
   }
   async function buildCanvas(r){
+    if(r.vacationOnly) return buildVacationCanvas(r);
     const cols=colsFor(r.modes);
     const rows=visibleRows(r);
     const W=1500, margin=18, brandH=190, infoRowH=50, barH=42, headH=58, dataH=54, totalH=62, footH=50;
@@ -744,6 +807,7 @@
     updateSalarySummary();buildVacationPeriods(false);requestAnimationFrame(updatePreviewScale);
   }
   $('salaryType').addEventListener('change',updateSalarySummary);$('salaryAmount').addEventListener('input',updateSalarySummary);
+  document.querySelectorAll('.calc-mode').forEach(el=>el.addEventListener('change',()=>syncCalcModes(el.value)));
   $('entryDate').addEventListener('change',()=>buildVacationPeriods(false));$('exitDate').addEventListener('change',()=>buildVacationPeriods(false));
   $('lastVacBtn').addEventListener('click',()=>setVacationSelection('last'));$('allVacBtn').addEventListener('click',()=>setVacationSelection('all'));$('noneVacBtn').addEventListener('click',()=>setVacationSelection('none'));
   $('manualVacationToggle').addEventListener('change',e=>$('manualVacationBox').classList.toggle('active',e.target.checked));
@@ -751,7 +815,7 @@
   $('calculateBtn').addEventListener('click',calculate);$('resetBtn').addEventListener('click',reset);$('downloadBtn').addEventListener('click',downloadImage);$('copyBtn').addEventListener('click',copyImage);
   // Fecha de salida/cálculo inicial: hoy del dispositivo.
   $('exitDate').value=todayInput();
-  updateSalarySummary(); buildVacationPeriods(false);
+  updateSalarySummary(); buildVacationPeriods(false); updateExitLabel();
   requestAnimationFrame(updatePreviewScale);
   window.addEventListener('resize',()=>requestAnimationFrame(updatePreviewScale),{passive:true});
   window.addEventListener('orientationchange',()=>setTimeout(updatePreviewScale,120),{passive:true});
