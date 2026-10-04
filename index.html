@@ -112,37 +112,50 @@
   .toolbar-actions .btn{min-height:40px;padding:8px 12px;font-size:12px}
   .preview-wrap{overflow:hidden;border-radius:12px;background:#e8ebf0;border:1px solid #d7dde5;padding:12px;width:100%}
   .preview-stage{position:relative;margin:0 auto;transition:height .15s ease,width .15s ease}
-  .result-card{width:690px;min-width:690px;background:#fff;color:#111;border:1px solid #333;font-family:Arial,Helvetica,sans-serif;box-shadow:0 4px 15px rgba(0,0,0,.08);transform-origin:top left}
-  .result-card.placeholder{min-height:440px;display:flex;align-items:center;justify-content:center;color:#667085;border:1px dashed #98a2b3;background:#f8fafc;font-family:inherit;text-align:center;padding:30px}
-  .vacation-card .card-brand{height:170px;display:flex;align-items:center;justify-content:flex-start;padding:8px 36px 8px 48px}
-  .vacation-card .card-brand .logo{width:300px;height:150px;object-fit:contain}
-
-  .card-brand{height:105px;display:flex;align-items:center;justify-content:space-between;padding:8px 50px 8px 48px}
-  .card-brand .logo{width:110px;height:80px;object-fit:contain}
-  .card-brand .qr{width:78px;height:78px;object-fit:contain}
+  .result-card{width:720px;min-width:720px;background:#fff;color:#111;border:1px solid #cfd5df;border-radius:14px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;box-shadow:0 12px 30px rgba(16,24,40,.14);transform-origin:top left}
+  .result-card.placeholder{min-height:440px;display:flex;align-items:center;justify-content:center;color:#667085;border:1px dashed #98a2b3;background:#f8fafc;font-family:inherit;text-align:center;padding:30px;border-radius:14px}
+  .card-brand{height:126px;display:grid;grid-template-columns:118px 1fr 96px;align-items:center;gap:18px;padding:14px 22px;background:linear-gradient(180deg,#ffffff 0%,#fbfcfe 100%);border-bottom:4px solid var(--gold)}
+  .card-brand .logo{width:105px;height:86px;object-fit:contain;display:block}
+  .card-brand-copy{min-width:0;text-align:left}
+  .card-kicker{font-size:10px;font-weight:900;letter-spacing:.18em;color:#9b7b47;text-transform:uppercase;margin-bottom:4px}
+  .card-main-title{font-size:19px;font-weight:900;letter-spacing:.015em;color:#182130;line-height:1.05}
+  .card-subtitle{font-size:10px;font-weight:800;color:#667085;text-transform:uppercase;letter-spacing:.06em;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .card-qr{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+  .card-qr .qr{width:76px;height:76px;object-fit:contain;display:block;background:#fff}
+  .card-qr span{font-size:8px;font-weight:800;color:#667085;letter-spacing:.01em}
   .info-table,.calc-table{border-collapse:collapse;width:100%;table-layout:fixed}
-  .info-table td{border-bottom:1px solid #2f3339;padding:5px 8px;font-size:11px;line-height:1.2}
-  .info-table .label{width:36%;font-weight:800;text-transform:uppercase}
-  .info-table .value{text-align:right;font-weight:700}
-  .info-table tr.dark td{background:#242d3b;color:#fff}
-  .info-table .salary-em{color:#e52424;font-weight:900}
-  .bar{background:#595959;color:#fff;text-align:center;font-weight:900;font-size:11px;padding:4px;text-transform:uppercase;border-top:1px solid #111;border-bottom:1px solid #111}
-  .calc-table th,.calc-table td{border:1px solid #c8c8c8;padding:5px 6px;font-size:11px;text-align:right}
-  .calc-table th{font-weight:900;text-align:center;background:#f3f3f3;color:#111}
-  .calc-table th:first-child,.calc-table td:first-child{text-align:left;width:34%;font-weight:800}
-  .calc-table th.days,.calc-table td.days{width:11%;text-align:center;color:#d71920;font-weight:900}
-  .calc-table th.fin{background:var(--green)}
-  .calc-table th.liq{background:var(--red);color:#fff}
-  .calc-table th.con{background:var(--purple)}
-  .calc-table td.fin{background:#e5f1dc}
-  .calc-table td.liq{background:#ffe1e1}
-  .calc-table td.con{background:#f0def6}
-  .calc-table tfoot td{font-size:12px;font-weight:900;border-top:2px solid #111}
-  .calc-table tfoot td.total-label{text-align:center;background:#fff;color:#111}
-  .calc-table tfoot td.fin{background:var(--green);color:#2f6b15}
-  .calc-table tfoot td.liq{background:var(--red);color:#fff}
-  .calc-table tfoot td.con{background:var(--purple);color:#6b2b82}
-  .card-footer{display:flex;justify-content:space-between;gap:15px;padding:5px 18px 7px;font-size:10px;font-weight:800;font-style:italic}
+  .info-table td{border-bottom:1px solid #d8dde5;padding:7px 10px;font-size:12px;line-height:1.15}
+  .info-table .label{width:37%;font-weight:900;text-transform:uppercase;letter-spacing:.01em}
+  .info-table .value{text-align:right;font-weight:800}
+  .info-table tr.dark td{background:#222b3a;color:#fff;border-bottom-color:#303b4e}
+  .info-table .salary-em{color:#d92d20;font-weight:900}
+  .bar{background:#535760;color:#fff;text-align:center;font-weight:900;font-size:11px;padding:6px;text-transform:uppercase;border-top:1px solid #3f434b;border-bottom:1px solid #3f434b;letter-spacing:.08em}
+  .calc-table th,.calc-table td{border:1px solid #d7dbe2;padding:7px 7px;font-size:12px;text-align:right}
+  .calc-table th{font-weight:900;text-align:center;background:#f7f8fa;color:#182130;letter-spacing:.02em}
+  .calc-table th:first-child,.calc-table td:first-child{text-align:left;width:35%;font-weight:850}
+  .calc-table th.days,.calc-table td.days{width:12%;text-align:center;color:#d92d20;font-weight:900}
+  .calc-table th.fin{background:#bcd9a8;color:#223719}
+  .calc-table th.liq{background:#d92d20;color:#fff}
+  .calc-table th.con{background:#d6afe3;color:#4f2461}
+  .calc-table td.fin{background:#eef7e8}
+  .calc-table td.liq{background:#fff0ef}
+  .calc-table td.con{background:#f6eafa}
+  .calc-table tfoot td{font-size:13px;font-weight:900;border-top:3px solid #182130;padding-top:8px;padding-bottom:8px}
+  .calc-table tfoot td.total-label{text-align:center;background:#fff;color:#111;letter-spacing:.04em}
+  .calc-table tfoot td.fin{background:#bcd9a8;color:#35601f}
+  .calc-table tfoot td.liq{background:#d92d20;color:#fff}
+  .calc-table tfoot td.con{background:#d6afe3;color:#5d286f}
+  .card-footer{display:flex;justify-content:space-between;gap:15px;padding:8px 18px 9px;font-size:10px;font-weight:900;font-style:italic;background:#fff}
+  .image-modal{position:fixed;inset:0;background:rgba(10,16,28,.72);z-index:120;display:none;align-items:center;justify-content:center;padding:18px}
+  .image-modal.show{display:flex}
+  .image-modal-card{width:min(920px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.34);padding:14px}
+  .image-modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+  .image-modal-head strong{font-size:15px;color:#182130}
+  .image-modal-close{border:0;background:#f2f4f7;border-radius:9px;width:36px;height:36px;font-size:22px;line-height:1;cursor:pointer;color:#344054}
+  .image-modal-text{margin:4px 0 10px;color:#667085;font-size:12px;line-height:1.45}
+  .image-modal-img{display:block;width:100%;height:auto;border:1px solid #d0d5dd;border-radius:10px;background:#fff}
+  .image-modal-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .image-modal-actions .btn{flex:1;min-width:150px}
   .disclaimer{margin-top:10px;color:#667085;font-size:10px;line-height:1.45}
   .error-box{display:none;margin-bottom:12px;padding:10px 12px;border-radius:10px;background:#fef3f2;color:#912018;border:1px solid #fecdca;font-size:12px;font-weight:700}
   .error-box.show{display:block}
@@ -203,11 +216,11 @@
     .result-panel{padding:10px}
     .result-toolbar{display:block;margin-bottom:9px}
     .result-toolbar h2{font-size:15px;margin-bottom:8px}
-    .toolbar-actions{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:6px}
+    .toolbar-actions{display:grid;grid-template-columns:repeat(3,1fr);width:100%;gap:6px}
     .toolbar-actions .btn{width:100%;min-height:44px;padding:8px 6px;font-size:11px}
     .preview-wrap{padding:6px;margin:0;width:100%;overflow:hidden;border-radius:10px}
     .preview-stage{margin:0 auto}
-    .result-card{width:690px;min-width:690px}
+    .result-card{width:720px;min-width:720px}
     .result-card.placeholder{min-height:360px;padding:22px;font-size:14px}
     .disclaimer{font-size:9.5px;line-height:1.4;margin-top:9px}
     .toast{bottom:calc(14px + env(safe-area-inset-bottom));max-width:calc(100vw - 24px);text-align:center}
@@ -400,8 +413,9 @@
       <div class="result-toolbar">
         <h2>Vista previa</h2>
         <div class="toolbar-actions">
-          <button id="copyBtn" class="btn btn-secondary" type="button" disabled>Copiar imagen</button>
-          <button id="downloadBtn" class="btn btn-primary" type="button" disabled>Descargar PNG</button>
+          <button id="copyBtn" class="btn btn-secondary" type="button" disabled>Copiar</button>
+          <button id="shareBtn" class="btn btn-secondary" type="button" disabled>Compartir</button>
+          <button id="downloadBtn" class="btn btn-primary" type="button" disabled>Descargar</button>
         </div>
       </div>
       <div id="previewWrap" class="preview-wrap">
@@ -413,6 +427,17 @@
     </section>
   </div>
 </main>
+<div id="imageModal" class="image-modal" aria-hidden="true">
+  <div class="image-modal-card">
+    <div class="image-modal-head"><strong>Imagen generada</strong><button id="imageModalClose" class="image-modal-close" type="button" aria-label="Cerrar">×</button></div>
+    <p id="imageModalText" class="image-modal-text">Mantén presionada la imagen en celular, o haz clic derecho en computadora, para guardarla o copiarla.</p>
+    <img id="imageModalImg" class="image-modal-img" alt="Resultado LEXET" />
+    <div class="image-modal-actions">
+      <button id="imageModalOpen" class="btn btn-secondary" type="button">Abrir imagen</button>
+      <button id="imageModalDone" class="btn btn-primary" type="button">Cerrar</button>
+    </div>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
 
 <script>
@@ -523,6 +548,11 @@
     return trunc2(sum);
   }
   function selectedCalcModes(){ return [...document.querySelectorAll('.calc-mode:checked')].map(i=>i.value); }
+  function resultLabel(r){
+    if(r && r.vacationOnly) return 'VACACIONES';
+    const map={finiquito:'FINIQUITO',liquidacion:'LIQUIDACIÓN',conciliacion:'CONCILIACIÓN'};
+    return (r?.modes||selectedCalcModes()).filter(x=>map[x]).map(x=>map[x]).join(' · ') || 'CÁLCULO LABORAL';
+  }
   function isVacationMode(modes = selectedCalcModes()){ return Array.isArray(modes) ? modes.includes('vacaciones') : modes==='vacaciones'; }
   function syncCalcModes(changed){
     const boxes=[...document.querySelectorAll('.calc-mode')];
@@ -601,6 +631,7 @@
     renderResult(result);
     $('downloadBtn').disabled=false;
     $('copyBtn').disabled=false;
+    $('shareBtn').disabled=false;
     return result;
   }
   function colsFor(modes){
@@ -654,7 +685,11 @@
     const salaryDisplay=r.salary.type==='daily'?r.salary.daily:r.salary.type==='weekly'?r.salary.weekly:r.salary.monthly;
     $('resultCard').className='result-card';
     $('resultCard').innerHTML=`
-      <div class="card-brand"><img class="logo" src="${LOGO}" alt="LEXET"><img class="qr" src="${QR}" alt="QR"></div>
+      <div class="card-brand">
+        <img class="logo" src="${LOGO}" alt="LEXET">
+        <div class="card-brand-copy"><div class="card-kicker">LEXET</div><div class="card-main-title">CÁLCULO LABORAL</div><div class="card-subtitle">${resultLabel(r)}</div></div>
+        <div class="card-qr"><img class="qr" src="${QR}" alt="QR"><span>lexet.com.mx</span></div>
+      </div>
       <table class="info-table">
         <tr class="dark"><td class="label">NOMBRE DEL TRABAJADOR</td><td class="value">${esc(r.worker)}</td></tr>
         <tr><td class="label">NOMBRE DEL PATRÓN</td><td class="value">${esc(r.company)||'&nbsp;'}</td></tr>
@@ -677,7 +712,11 @@
     const rows=visibleRows(r);
     $('resultCard').className='result-card vacation-card';
     $('resultCard').innerHTML=`
-      <div class="card-brand"><img class="logo" src="${LOGO}" alt="LEXET"></div>
+      <div class="card-brand">
+        <img class="logo" src="${LOGO}" alt="LEXET">
+        <div class="card-brand-copy"><div class="card-kicker">LEXET</div><div class="card-main-title">CÁLCULO DE VACACIONES</div><div class="card-subtitle">VACACIONES · PRIMA VACACIONAL</div></div>
+        <div class="card-qr"><img class="qr" src="${QR}" alt="QR"><span>lexet.com.mx</span></div>
+      </div>
       <table class="info-table">
         <tr class="dark"><td class="label">NOMBRE DEL TRABAJADOR</td><td class="value">${esc(r.worker)}</td></tr>
         <tr><td class="label">NOMBRE DEL PATRÓN</td><td class="value">${esc(r.company)||'&nbsp;'}</td></tr>
@@ -721,7 +760,13 @@
     const ctx=canvas.getContext('2d');
     ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.strokeRect(1,1,W-2,H-2);
     const [logo,qr]=await Promise.all([loadImg(LOGO),loadImg(QR)]);
-    drawFit(ctx,logo,70,24,220,140); drawFit(ctx,qr,W-250,32,145,145);
+    drawFit(ctx,logo,62,28,210,145);
+    drawText(ctx,'LEXET',330,62,520,'left','900',18,'#9b7b47');
+    drawText(ctx,'CÁLCULO LABORAL',330,103,760,'left','900',34,'#182130');
+    drawText(ctx,resultLabel(r),330,145,760,'left','800',18,'#667085');
+    drawFit(ctx,qr,W-230,28,150,150);
+    drawText(ctx,'lexet.com.mx',W-155,185,190,'center','800',15,'#667085');
+    ctx.fillStyle='#c9aa72';ctx.fillRect(margin,brandH-3,W-margin*2,4);
     let y=margin+brandH;
     const labelW=540, rowW=W-margin*2;
     const salaryDisplay=r.salary.type==='daily'?r.salary.daily:r.salary.type==='weekly'?r.salary.weekly:r.salary.monthly;
@@ -735,30 +780,85 @@
       {l:'ANTIGÜEDAD (AÑOS)',v:fmtDays(r.antiquityYears),dark:true}
     ];
     for(const item of info){
-      ctx.fillStyle=item.dark?'#242d3b':'#fff';ctx.fillRect(margin,y,rowW,infoRowH);
+      ctx.fillStyle=item.dark?'#222b3a':'#fff';ctx.fillRect(margin,y,rowW,infoRowH);
       ctx.strokeStyle='#252525';ctx.lineWidth=1;ctx.strokeRect(margin,y,rowW,infoRowH);
       drawText(ctx,item.l,margin+10,y+infoRowH/2,labelW-20,'left','800',22,item.dark?'#fff':item.salary?'#e52424':'#111');
       drawText(ctx,item.v||'',W-margin-14,y+infoRowH/2,rowW-labelW-20,'right','700',23,item.dark?'#fff':item.salary?'#e52424':'#111');
       y+=infoRowH;
     }
-    ctx.fillStyle='#595959';ctx.fillRect(margin,y,rowW,barH);drawText(ctx,'DESGLOSE',W/2,y+barH/2,rowW,'center','900',22,'#fff');y+=barH;
+    ctx.fillStyle='#535760';ctx.fillRect(margin,y,rowW,barH);drawText(ctx,'DESGLOSE',W/2,y+barH/2,rowW,'center','900',22,'#fff');y+=barH;
     const nameW=500, daysW=165, remain=rowW-nameW-daysW, valueW=remain/cols.length;
     const x0=margin;
     const headerCells=[{x:x0,w:nameW,t:'PRESTACIÓN',bg:'#f3f3f3',fg:'#111'},{x:x0+nameW,w:daysW,t:'DÍAS',bg:'#f3f3f3',fg:'#111'}];
-    cols.forEach((c,i)=>headerCells.push({x:x0+nameW+daysW+i*valueW,w:valueW,t:c.title,bg:c.key==='fin'?'#c6e0b4':c.key==='liq'?'#e90000':'#d9b3e6',fg:c.key==='liq'?'#fff':'#111'}));
+    cols.forEach((c,i)=>headerCells.push({x:x0+nameW+daysW+i*valueW,w:valueW,t:c.title,bg:c.key==='fin'?'#bcd9a8':c.key==='liq'?'#d92d20':'#d6afe3',fg:c.key==='liq'?'#fff':'#111'}));
     for(const c of headerCells){ctx.fillStyle=c.bg;ctx.fillRect(c.x,y,c.w,headH);ctx.strokeStyle='#444';ctx.strokeRect(c.x,y,c.w,headH);drawText(ctx,c.t,c.x+c.w/2,y+headH/2,c.w-12,'center','900',22,c.fg);} y+=headH;
     for(const row of rows){
       ctx.fillStyle='#fff';ctx.fillRect(x0,y,nameW,dataH);ctx.strokeStyle='#b7b7b7';ctx.strokeRect(x0,y,nameW,dataH);drawText(ctx,row.name,x0+10,y+dataH/2,nameW-20,'left','800',22,'#111');
       ctx.fillStyle='#fff';ctx.fillRect(x0+nameW,y,daysW,dataH);ctx.strokeRect(x0+nameW,y,daysW,dataH);drawText(ctx,row.days,x0+nameW+daysW/2,y+dataH/2,daysW-10,'center','900',22,'#d71920');
-      cols.forEach((c,i)=>{const x=x0+nameW+daysW+i*valueW; const bg=c.key==='fin'?'#e5f1dc':c.key==='liq'?'#ffe1e1':'#f0def6';ctx.fillStyle=bg;ctx.fillRect(x,y,valueW,dataH);ctx.strokeRect(x,y,valueW,dataH);const val=row[c.key]==null?'':mxn.format(row[c.key]);drawText(ctx,val,x+valueW-12,y+dataH/2,valueW-18,'right','700',21,'#111');});
+      cols.forEach((c,i)=>{const x=x0+nameW+daysW+i*valueW; const bg=c.key==='fin'?'#eef7e8':c.key==='liq'?'#fff0ef':'#f6eafa';ctx.fillStyle=bg;ctx.fillRect(x,y,valueW,dataH);ctx.strokeRect(x,y,valueW,dataH);const val=row[c.key]==null?'':mxn.format(row[c.key]);drawText(ctx,val,x+valueW-12,y+dataH/2,valueW-18,'right','700',21,'#111');});
       y+=dataH;
     }
     ctx.fillStyle='#fff';ctx.fillRect(x0,y,nameW+daysW,totalH);ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.strokeRect(x0,y,nameW+daysW,totalH);drawText(ctx,'TOTAL',x0+(nameW+daysW)/2,y+totalH/2,nameW+daysW-20,'center','900',24,'#111');
-    cols.forEach((c,i)=>{const x=x0+nameW+daysW+i*valueW; const bg=c.key==='fin'?'#c6e0b4':c.key==='liq'?'#e90000':'#d9b3e6'; const fg=c.key==='liq'?'#fff':c.key==='fin'?'#2f6b15':'#6b2b82';ctx.fillStyle=bg;ctx.fillRect(x,y,valueW,totalH);ctx.strokeStyle='#111';ctx.strokeRect(x,y,valueW,totalH);drawText(ctx,mxn.format(totalFor(r,c.key)),x+valueW-12,y+totalH/2,valueW-20,'right','900',23,fg);});
+    cols.forEach((c,i)=>{const x=x0+nameW+daysW+i*valueW; const bg=c.key==='fin'?'#bcd9a8':c.key==='liq'?'#d92d20':'#d6afe3'; const fg=c.key==='liq'?'#fff':c.key==='fin'?'#2f6b15':'#6b2b82';ctx.fillStyle=bg;ctx.fillRect(x,y,valueW,totalH);ctx.strokeStyle='#111';ctx.strokeRect(x,y,valueW,totalH);drawText(ctx,mxn.format(totalFor(r,c.key)),x+valueW-12,y+totalH/2,valueW-20,'right','900',23,fg);});
     y+=totalH;
     const elaborationUTC=new Date(Date.UTC(r.elaboration.getFullYear(),r.elaboration.getMonth(),r.elaboration.getDate()));
     drawText(ctx,'FECHA DE ELABORACIÓN',margin+40,y+footH/2,500,'left','800',20,'#111');
     drawText(ctx,fmtDate(elaborationUTC),W-margin-40,y+footH/2,520,'right','800',20,'#111');
+    return canvas;
+  }
+  async function buildVacationCanvas(r){
+    const rows=visibleRows(r);
+    const W=1500, margin=18, brandH=205, infoRowH=54, barH=46, headH=62, dataH=58, totalH=66, footH=54;
+    const H=margin*2+brandH+(7*infoRowH)+barH+headH+(rows.length*dataH)+totalH+footH;
+    const canvas=document.createElement('canvas'); canvas.width=W; canvas.height=H;
+    const ctx=canvas.getContext('2d');
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.strokeStyle='#c8ced8';ctx.lineWidth=2;ctx.strokeRect(1,1,W-2,H-2);
+    const [logo,qr]=await Promise.all([loadImg(LOGO),loadImg(QR)]);
+    drawFit(ctx,logo,62,28,210,145);
+    drawText(ctx,'LEXET',330,62,520,'left','900',18,'#9b7b47');
+    drawText(ctx,'CÁLCULO DE VACACIONES',330,103,760,'left','900',34,'#182130');
+    drawText(ctx,'VACACIONES · PRIMA VACACIONAL',330,145,760,'left','800',18,'#667085');
+    drawFit(ctx,qr,W-230,28,150,150);
+    drawText(ctx,'lexet.com.mx',W-155,185,190,'center','800',15,'#667085');
+    ctx.fillStyle='#c9aa72';ctx.fillRect(margin,brandH-3,W-margin*2,4);
+    let y=margin+brandH;
+    const labelW=560,rowW=W-margin*2;
+    const info=[
+      {l:'NOMBRE DEL TRABAJADOR',v:r.worker,dark:true},
+      {l:'NOMBRE DEL PATRÓN',v:r.company,dark:false},
+      {l:'FECHA DE INGRESO',v:fmtDate(r.entry),dark:true},
+      {l:'SALARIO MENSUAL',v:mxn.format(r.salary.monthly),dark:false,salary:true},
+      {l:'SALARIO DIARIO',v:mxn.format(r.salary.daily),dark:true},
+      {l:'FECHA DE CÁLCULO',v:fmtDate(r.exit),dark:false},
+      {l:'ANTIGÜEDAD (AÑOS)',v:fmtDays(r.antiquityYears),dark:true}
+    ];
+    for(const item of info){
+      ctx.fillStyle=item.dark?'#222b3a':'#fff';ctx.fillRect(margin,y,rowW,infoRowH);
+      ctx.strokeStyle=item.dark?'#303b4e':'#d8dde5';ctx.lineWidth=1;ctx.strokeRect(margin,y,rowW,infoRowH);
+      drawText(ctx,item.l,margin+14,y+infoRowH/2,labelW-28,'left','900',22,item.salary?'#b95013':(item.dark?'#fff':'#111'));
+      drawText(ctx,item.v||'',W-margin-16,y+infoRowH/2,rowW-labelW-28,'right','800',23,item.salary?'#d92d20':(item.dark?'#fff':'#111'));
+      y+=infoRowH;
+    }
+    ctx.fillStyle='#535760';ctx.fillRect(margin,y,rowW,barH);drawText(ctx,'DESGLOSE',W/2,y+barH/2,rowW,'center','900',21,'#fff');y+=barH;
+    const nameW=650, daysW=260, valueW=rowW-nameW-daysW, x0=margin;
+    const heads=[
+      {x:x0,w:nameW,t:'PRESTACIÓN',bg:'#f7f8fa',fg:'#182130'},
+      {x:x0+nameW,w:daysW,t:'DÍAS',bg:'#f7f8fa',fg:'#182130'},
+      {x:x0+nameW+daysW,w:valueW,t:'SUBTOTAL',bg:'#bcd9a8',fg:'#223719'}
+    ];
+    for(const c of heads){ctx.fillStyle=c.bg;ctx.fillRect(c.x,y,c.w,headH);ctx.strokeStyle='#cfd5df';ctx.strokeRect(c.x,y,c.w,headH);drawText(ctx,c.t,c.x+c.w/2,y+headH/2,c.w-16,'center','900',23,c.fg);} y+=headH;
+    for(const row of rows){
+      ctx.fillStyle='#fff';ctx.fillRect(x0,y,nameW,dataH);ctx.strokeStyle='#d7dbe2';ctx.strokeRect(x0,y,nameW,dataH);drawText(ctx,row.name,x0+14,y+dataH/2,nameW-28,'left','800',22,'#111');
+      ctx.fillStyle='#fff';ctx.fillRect(x0+nameW,y,daysW,dataH);ctx.strokeRect(x0+nameW,y,daysW,dataH);drawText(ctx,row.days,x0+nameW+daysW/2,y+dataH/2,daysW-16,'center','900',22,'#d92d20');
+      ctx.fillStyle='#eef7e8';ctx.fillRect(x0+nameW+daysW,y,valueW,dataH);ctx.strokeRect(x0+nameW+daysW,y,valueW,dataH);drawText(ctx,mxn.format(row.fin),x0+nameW+daysW+valueW-16,y+dataH/2,valueW-24,'right','800',22,'#111');
+      y+=dataH;
+    }
+    ctx.fillStyle='#fff';ctx.fillRect(x0,y,nameW+daysW,totalH);ctx.strokeStyle='#182130';ctx.lineWidth=2;ctx.strokeRect(x0,y,nameW+daysW,totalH);drawText(ctx,'TOTAL',x0+(nameW+daysW)/2,y+totalH/2,nameW+daysW-30,'center','900',25,'#111');
+    ctx.fillStyle='#bcd9a8';ctx.fillRect(x0+nameW+daysW,y,valueW,totalH);ctx.strokeStyle='#182130';ctx.strokeRect(x0+nameW+daysW,y,valueW,totalH);drawText(ctx,mxn.format(r.vacationOnlyTotal),x0+nameW+daysW+valueW-16,y+totalH/2,valueW-24,'right','900',26,'#35601f');
+    y+=totalH;
+    const elaborationUTC=new Date(Date.UTC(r.elaboration.getFullYear(),r.elaboration.getMonth(),r.elaboration.getDate()));
+    drawText(ctx,'FECHA DE ELABORACIÓN',margin+36,y+footH/2,520,'left','900',20,'#111');
+    drawText(ctx,fmtDate(elaborationUTC),W-margin-36,y+footH/2,560,'right','900',20,'#111');
     return canvas;
   }
   function updatePreviewScale(){
@@ -769,7 +869,7 @@
     card.style.transform='none';
     stage.style.width='auto';
     stage.style.height='auto';
-    const naturalWidth=690;
+    const naturalWidth=720;
     const available=Math.max(1,wrap.clientWidth-2);
     const scale=Math.min(1,available/naturalWidth);
     card.style.transform=`scale(${scale})`;
@@ -778,22 +878,86 @@
     stage.style.height=`${card.offsetHeight*scale}px`;
   }
   function safeFileName(name){ return String(name||'trabajador').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,60)||'trabajador'; }
+  function canvasToBlob(canvas){
+    return new Promise((resolve,reject)=>{
+      try{ canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('No fue posible generar el PNG.')),'image/png',1); }
+      catch(e){ reject(e); }
+    });
+  }
+  function imageFileName(){
+    return `LEXET_${safeFileName(latestResult?.worker)}_${latestResult?.exit?toInputDate(latestResult.exit):todayInput()}.png`;
+  }
+  let latestGeneratedImageUrl='';
+  function showGeneratedImage(canvas,message){
+    latestGeneratedImageUrl=canvas.toDataURL('image/png');
+    $('imageModalImg').src=latestGeneratedImageUrl;
+    $('imageModalText').textContent=message||'Mantén presionada la imagen en celular, o haz clic derecho en computadora, para guardarla o copiarla.';
+    $('imageModal').classList.add('show');
+    $('imageModal').setAttribute('aria-hidden','false');
+  }
+  function closeGeneratedImage(){
+    $('imageModal').classList.remove('show');
+    $('imageModal').setAttribute('aria-hidden','true');
+  }
+  async function getGeneratedCanvas(){
+    if(!latestResult && !calculate()) return null;
+    return await buildCanvas(latestResult);
+  }
   async function downloadImage(){
-    if(!latestResult && !calculate()) return;
-    const c=await buildCanvas(latestResult); const a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download=`LEXET_${safeFileName(latestResult.worker)}_${toInputDate(latestResult.exit)}.png`; document.body.appendChild(a); a.click(); a.remove();
-    toast('Imagen PNG generada.');
+    try{
+      const canvas=await getGeneratedCanvas(); if(!canvas) return;
+      const blob=await canvasToBlob(canvas);
+      const filename=imageFileName();
+      const file=new File([blob],filename,{type:'image/png'});
+      const isiOS=/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+      if(isiOS && navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({files:[file],title:'Cálculo LEXET'});
+        toast('Imagen lista para guardar o compartir.');
+        return;
+      }
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;a.download=filename;a.rel='noopener';a.style.display='none';
+      document.body.appendChild(a);a.click();a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),15000);
+      toast('Descarga iniciada.');
+    }catch(e){
+      try{ const canvas=await getGeneratedCanvas(); if(canvas) showGeneratedImage(canvas,'Tu navegador bloqueó la descarga automática. Mantén presionada la imagen para guardarla.'); }catch(_){ }
+      toast('Abrí la imagen para que puedas guardarla manualmente.');
+    }
   }
   async function copyImage(){
-    if(!latestResult && !calculate()) return;
     try{
-      const c=await buildCanvas(latestResult);
-      const blob=await new Promise(res=>c.toBlob(res,'image/png'));
-      if(!navigator.clipboard || !window.ClipboardItem) throw new Error('Clipboard API no disponible');
-      await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
-      toast('Imagen copiada. Ya puedes pegarla en WhatsApp.');
+      const canvas=await getGeneratedCanvas(); if(!canvas) return;
+      const blob=await canvasToBlob(canvas);
+      if(window.isSecureContext && navigator.clipboard && window.ClipboardItem){
+        await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
+        toast('Imagen copiada. Ya puedes pegarla en WhatsApp.');
+        return;
+      }
+      throw new Error('Portapapeles de imágenes no disponible en este contexto');
     }catch(e){
-      toast('Tu navegador no permite copiar la imagen aquí. Usa “Descargar PNG”.');
+      const canvas=await getGeneratedCanvas(); if(!canvas) return;
+      const blob=await canvasToBlob(canvas);
+      const file=new File([blob],imageFileName(),{type:'image/png'});
+      if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+        try{ await navigator.share({files:[file],title:'Cálculo LEXET'}); toast('Imagen lista para compartir.'); return; }catch(err){ if(err && err.name==='AbortError') return; }
+      }
+      showGeneratedImage(canvas,'Este navegador no permite copiar imágenes desde un archivo local. Mantén presionada la imagen (celular) o haz clic derecho (PC) para copiarla o guardarla.');
+      toast('Abrí una vista compatible para copiar o guardar.');
     }
+  }
+  async function shareImage(){
+    try{
+      const canvas=await getGeneratedCanvas(); if(!canvas) return;
+      const blob=await canvasToBlob(canvas);
+      const file=new File([blob],imageFileName(),{type:'image/png'});
+      if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({files:[file],title:'Cálculo LEXET'});
+        return;
+      }
+      showGeneratedImage(canvas,'La función de compartir no está disponible en este navegador. Desde esta vista puedes guardar o copiar la imagen.');
+    }catch(e){ if(e && e.name!=='AbortError') toast('No fue posible abrir el menú de compartir.'); }
   }
   function toast(msg){ const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2800); }
   function reset(){
@@ -803,7 +967,7 @@
     $('manualVacationToggle').checked=false;$('manualVacationDays').value='';$('manualVacationBox').classList.remove('active');
     $('includeAguinaldo').checked=true;$('includeSeniorityPremium').checked=true;$('aguinaldoAnnualDays').value=15;$('vacationPremiumPct').value=25;$('indemnityDays').value=90;$('seniorityDaysPerYear').value=12;$('conciliationPct').value=50;
     $('includeExtraBenefit').checked=false;$('extraBenefitName').value='';$('extraBenefitAmount').value='';$('extraBenefitBlock').classList.remove('active');
-    latestResult=null;$('resultCard').className='result-card placeholder';$('resultCard').innerHTML='Completa los datos y pulsa <strong>&nbsp;Calcular&nbsp;</strong> para generar el resultado.';$('downloadBtn').disabled=true;$('copyBtn').disabled=true;$('errorBox').classList.remove('show');
+    latestResult=null;$('resultCard').className='result-card placeholder';$('resultCard').innerHTML='Completa los datos y pulsa <strong>&nbsp;Calcular&nbsp;</strong> para generar el resultado.';$('downloadBtn').disabled=true;$('copyBtn').disabled=true;$('shareBtn').disabled=true;$('errorBox').classList.remove('show');
     updateSalarySummary();buildVacationPeriods(false);requestAnimationFrame(updatePreviewScale);
   }
   $('salaryType').addEventListener('change',updateSalarySummary);$('salaryAmount').addEventListener('input',updateSalarySummary);
@@ -812,7 +976,10 @@
   $('lastVacBtn').addEventListener('click',()=>setVacationSelection('last'));$('allVacBtn').addEventListener('click',()=>setVacationSelection('all'));$('noneVacBtn').addEventListener('click',()=>setVacationSelection('none'));
   $('manualVacationToggle').addEventListener('change',e=>$('manualVacationBox').classList.toggle('active',e.target.checked));
   $('includeExtraBenefit').addEventListener('change',e=>$('extraBenefitBlock').classList.toggle('active',e.target.checked));
-  $('calculateBtn').addEventListener('click',calculate);$('resetBtn').addEventListener('click',reset);$('downloadBtn').addEventListener('click',downloadImage);$('copyBtn').addEventListener('click',copyImage);
+  $('calculateBtn').addEventListener('click',calculate);$('resetBtn').addEventListener('click',reset);$('downloadBtn').addEventListener('click',downloadImage);$('copyBtn').addEventListener('click',copyImage);$('shareBtn').addEventListener('click',shareImage);
+  $('imageModalClose').addEventListener('click',closeGeneratedImage);$('imageModalDone').addEventListener('click',closeGeneratedImage);
+  $('imageModal').addEventListener('click',e=>{ if(e.target===$('imageModal')) closeGeneratedImage(); });
+  $('imageModalOpen').addEventListener('click',()=>{ if(latestGeneratedImageUrl) window.open(latestGeneratedImageUrl,'_blank','noopener'); });
   // Fecha de salida/cálculo inicial: hoy del dispositivo.
   $('exitDate').value=todayInput();
   updateSalarySummary(); buildVacationPeriods(false); updateExitLabel();
